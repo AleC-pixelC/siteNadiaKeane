@@ -1,0 +1,173 @@
+<svg
+    width="120"
+    height="120"
+    viewBox="0 0 200 200"
+    xmlns="http://www.w3.org/2000/svg"
+>
+
+    <!-- Círculos -->
+    <circle
+        cx="100"
+        cy="100"
+        r="55"
+        fill="none"
+        stroke="#6F4323"
+        stroke-width="1.5"
+    />
+
+    <circle
+        cx="100"
+        cy="100"
+        r="38"
+        fill="none"
+        stroke="#6F4323"
+        stroke-width="1"
+    />
+
+
+    <!-- PONTA NORTE -->
+    <g>
+        <polygon
+            points="100,100 100,20 91,100"
+            fill="#6F4323"
+            stroke="#6F4323"
+        />
+
+        <polygon
+            points="100,100 100,20 109,100"
+            fill="none"
+            stroke="#6F4323"
+        />
+    </g>
+
+
+    <!-- PONTA LESTE -->
+    <g transform="rotate(90 100 100)">
+        <polygon
+            points="100,100 100,20 91,100"
+            fill="#6F4323"
+            stroke="#6F4323"
+        />
+
+        <polygon
+            points="100,100 100,20 109,100"
+            fill="none"
+            stroke="#6F4323"
+        />
+    </g>
+
+
+    <!-- PONTA SUL -->
+    <g transform="rotate(180 100 100)">
+        <polygon
+            points="100,100 100,20 91,100"
+            fill="#6F4323"
+            stroke="#6F4323"
+        />
+
+        <polygon
+            points="100,100 100,20 109,100"
+            fill="none"
+            stroke="#6F4323"
+        />
+    </g>
+
+
+    <!-- PONTA OESTE -->
+    <g transform="rotate(270 100 100)">
+        <polygon
+            points="100,100 100,20 91,100"
+            fill="#6F4323"
+            stroke="#6F4323"
+        />
+
+        <polygon
+            points="100,100 100,20 109,100"
+            fill="none"
+            stroke="#6F4323"
+        />
+    </g>
+
+
+    <!-- DIAGONAIS -->
+
+    <g transform="rotate(45 100 100)">
+        <polygon
+            points="100,100 100,42 94,100"
+            fill="#6F4323"
+            stroke="#6F4323"
+        />
+
+        <polygon
+            points="100,100 100,42 106,100"
+            fill="none"
+            stroke="#6F4323"
+        />
+    </g>
+
+    <g transform="rotate(135 100 100)">
+        <polygon
+            points="100,100 100,42 94,100"
+            fill="#6F4323"
+            stroke="#6F4323"
+        />
+
+        <polygon
+            points="100,100 100,42 106,100"
+            fill="none"
+            stroke="#6F4323"
+        />
+    </g>
+
+    <g transform="rotate(225 100 100)">
+        <polygon
+            points="100,100 100,42 94,100"
+            fill="#6F4323"
+            stroke="#6F4323"
+        />
+
+        <polygon
+            points="100,100 100,42 106,100"
+            fill="none"
+            stroke="#6F4323"
+        />
+    </g>
+
+    <g transform="rotate(315 100 100)">
+        <polygon
+            points="100,100 100,42 94,100"
+            fill="#6F4323"
+            stroke="#6F4323"
+        />
+
+        <polygon
+            points="100,100 100,42 106,100"
+            fill="none"
+            stroke="#6F4323"
+        />
+    </g>
+
+
+    <!-- Centro -->
+    <circle
+        cx="100"
+        cy="100"
+        r="5"
+        fill="#6F4323"
+    />
+
+
+    <!-- Letras -->
+    <g
+        fill="#6F4323"
+        font-family="Georgia, serif"
+        font-size="14"
+        text-anchor="middle"
+    >
+        <text x="100" y="14">N</text>
+        <text x="188" y="105">E</text>
+        <text x="100" y="196">S</text>
+        <text x="12" y="105">W</text>
+    </g>
+
+</svg>
