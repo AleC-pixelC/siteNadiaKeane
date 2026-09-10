@@ -1,26 +1,32 @@
 @font-face {
-  font-family: 'fonteCinzel';
-  src: url('fontes/CinzelDecorative-Regular.ttf') format('truetype');
+    font-family: 'fonteCinzel';
+    src: url('fontes/CinzelDecorative-Regular.ttf') format('truetype');
 }
-
+* {
+    box-sizing: border-box;
+}
 html, body {
     margin: 0;
     width: 100%;
-    height: 100%;
-    overflow: hidden;
+    min-height: 100%;
+}
+body {
+    font-family: "Cormorant Garamond", serif;
+    color: #172929;
+}
+p, h1, h2, h3, h4 {
+    font-family: "Cormorant Garamond", serif;
 }
 
-body {
+.entrada {
+    width: 100%;
     height: 100vh;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     text-align: center;
-}
-
-.entrada {
     background-image: url(img/fundo.jpg);
     background-repeat: no-repeat;
     background-size: cover;
@@ -30,7 +36,6 @@ body {
 #bussola {
     width: 180px;
     height: auto;
-    margin-bottom: 40px;
     position: absolute;
     top: 25px;
     left: 50%;
@@ -63,52 +68,40 @@ body {
 #ancora {
     width: 30px;
     height: auto;
-    margin-bottom: 25px;
-
     position: absolute;
-
     left: 50%;
     top: 50%;
-
     transform: translate(-50%, -50%);
-
 }
 
-p {
+.entrada p {
     margin-bottom: 5px;
     font-size: 30px;
-}
-
-p, h1, h2 {
     color: #172929;
-    font-family: "Cormorant Garamond", serif;
 }
 
-h1 {
+.entrada h1 {
     margin-top: auto;
-    font-size: 80px;
     margin-bottom: 0;
+    font-size: 80px;
+    color: #172929;
 }
 
 button {
     margin-top: 30px;
     background-color: #8B4F27;
     color: #e2cfc1;
-
     font-family: "Cormorant Garamond", serif;
     font-size: 24px;
     font-weight: bold;
-
     padding: 10px 42px;
-
     border: 2px solid #5E351C;
     border-radius: 8px;
-
     box-shadow:
         inset 0 0 0 2px #B57A4A,
         0 4px 7px rgba(0, 0, 0, 0.35);
-
     cursor: pointer;
+    transition: 0.3s;
 }
 
 button:hover {
@@ -131,11 +124,10 @@ button:hover {
     position: absolute;
     width: 800px;
     height: 380px;
-
     background: radial-gradient(
         ellipse,
         rgba(255, 255, 255, 0.55) 20%,
-        rgba(255, 255, 255, 0.30) 600%,
+        rgba(255, 255, 255, 0.30) 60%,
         rgba(255, 255, 255, 0) 75%
     );
     filter: blur(35px);
@@ -144,7 +136,7 @@ button:hover {
 }
 
 .fumaca span:nth-child(1) {
-    bottom: 10;
+    bottom: 10%;
     left: -650px;
     animation-delay: 0s;
 }
@@ -210,23 +202,24 @@ button:hover {
 header {
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #172929;
     background-color: #c7d3d0;
-    z-index: 100;
     border-bottom: 1px solid rgba(23, 41, 41, 0.25);
-    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.10);
+    box-shadow:
+        0 5px 8px rgba(0, 0, 0, 0.10);
     padding: 5px 15px;
-    box-sizing: border-box;
+    z-index: 100;
 }
 
 header h2 {
+    margin: 0 20px;
     color: #172929;
-    margin: 0 20px 0 20px;
-    font-size: 30px;
+    font-size: clamp(22px, 2vw, 30px);
+    white-space: nowrap;
     text-shadow:
         0 1px 0 rgba(255, 255, 255, 0.5),
         0 2px 3px rgba(0, 0, 0, 0.12);
@@ -235,14 +228,16 @@ header h2 {
 nav {
     margin-right: 15px;
     display: flex;
-    gap: 25px;
+    align-items: center;
+    gap: clamp(10px, 2vw, 25px);
 }
 
 nav a {
     text-decoration: none;
     color: #172929;
-    font-family: "Cormorant Garamond", serif;
-    font-size: 20px;
+    font-size: clamp(15px, 1.3vw, 20px);
+    white-space: nowrap;
+    transition: 0.3s;
 }
 
 nav a:hover {
@@ -256,65 +251,96 @@ nav a.ativo {
 }
 
 .paginasCentrais {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     background-image: url(img/fundoPrincipal.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    display: block;
-    overflow-y: auto;
-    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .paginasCentrais > h1 {
+    width: 100%;
     margin: 0;
     padding-top: 80px;
-    width: 100%;
     text-align: center;
     color: #172929;
-    font-family: "Cormorant Garamond", serif;
-    font-size: 55px;
+    font-size: clamp(38px, 4vw, 55px);
     line-height: 1;
 }
 
+
 #principalDiv {
-    width: 100%;
+    width: min(1400px, 92%);
+    margin: 0 auto;
     display: flex;
     align-items: center;
-    padding: 20px 60px 30px;
-    box-sizing: border-box;
+    gap: clamp(20px, 4vw, 60px);
+    padding: 30px 0;
 }
 
 .textoApresentacao {
     width: 50%;
-    padding-right: 10px;
-    box-sizing: border-box;
 }
 
 .textoApresentacao p {
     margin: 0;
     color: #6F4323;
-    font-family: "Cormorant Garamond", serif;
-    font-size: 25px;
+    font-size: clamp(19px, 1.5vw, 25px);
     line-height: 1.5;
     text-align: justify;
 }
 
 .imagemLivros {
     width: 50%;
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    justify-items: center;
     align-items: center;
 }
 
+.imagemLivros a {
+    width: 100%;
+    height: 260px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
 .imagemLivros img {
-    width: 75%;
-    height: auto;
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
     object-fit: contain;
+    transition:
+        transform 0.3s ease,
+        filter 0.3s ease;
+}
+
+.imagemLivros a:hover img {
+    transform: translateY(-8px) scale(1.04);
+    filter: drop-shadow(
+        0 8px 5px rgba(0, 0, 0, 0.25)
+    );
+}
+
+.imagemLivros a:nth-child(4) {
+    grid-column: 1 / 2;
+    transform: translateX(55%);
+}
+
+.imagemLivros a:nth-child(5) {
+    grid-column: 3 / 4;
+    transform: translateX(-55%);
 }
 
 .pontaPe {
     width: 95%;
-    margin-left: 10px;
+    margin: auto auto 10px;
 }
 
 .pontaPe p {
@@ -325,28 +351,239 @@ nav a.ativo {
     color: #172929;
 }
 
-@media (max-width: 768px) {
+.autora {
+    width: min(1200px, 85%);
+    margin: 30px auto;
+    display: flex;
+    align-items: center;
+    gap: clamp(30px, 5vw, 70px);
+}
+
+.imgAutora {
+    width: 35%;
+}
+
+.imgAutora img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.textAutora {
+    width: 65%;
+}
+
+.textAutora p {
+    margin: 0;
+    font-size: clamp(18px, 1.4vw, 22px);
+    line-height: 1.5;
+    text-align: justify;
+    color: #6F4323;
+}
+
+.saibaMais {
+    width: min(1200px, 90%);
+    margin: 30px auto;
+    display: flex;
+    justify-content: space-between;
+    gap: clamp(30px, 5vw, 60px);
+}
+
+.outrasObras {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.outrasObras img {
+    width: clamp(130px, 12vw, 180px);
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.oubrasObras img:hover {
+    transform: scale(1.05);
+}
+
+.redes {
+    width: 50%;
+}
+
+@media (max-width: 1100px) {
+    header {
+        padding: 5px 10px;
+    }
+    header h2 {
+        margin-left: 10px;
+        margin-right: 15px;
+    }
+    nav {
+        gap: 14px;
+        margin-right: 5px;
+    }
+    nav a {
+        font-size: 16px;
+    }
     #principalDiv {
+        width: 94%;
+        gap: 25px;
+    }
+    .textoApresentacao p {
+        font-size: 20px;
+    }
+    .imagemLivros {
+        gap: 12px;
+    }
+    .imagemLivros a {
+        height: 220px;
+    }
+    .imagemLivros img {
+        width: 100%;
+        height: 100%;
+        max-width: 155px;
+        object-fit: contain;
+    }
+    .imagemLivros a:nth-child(4) {
+        transform: translateX(50%);
+    }
+    .imagemLivros a:nth-child(5) {
+        transform: translateX(-50%);
+    }
+    .autora {
+        width: 90%;
+        gap: 30px;
+    }
+    .saibaMais {
+        width: 90%;
+        gap: 30px;
+    }
+    .outrasObras img {
+        width: 140px;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        position: relative;
         flex-direction: column;
-        padding: 20px 25px;
+        padding: 8px;
+    }
+    header h2 {
+        margin: 0 0 8px;
+        font-size: 24px;
+    }
+    nav {
+        width: 100%;
+        margin: 0;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px 15px;
+    }
+    nav a {
+        font-size: 14px;
+    }
+    .paginasCentrais > h1 {
+        padding-top: 30px;
+        padding-left: 15px;
+        padding-right: 15px;
+        font-size: 38px;
+    }
+    #principalDiv {
+        width: 90%;
+        flex-direction: column;
+        padding: 20px 0;
+        gap: 25px;
     }
     .textoApresentacao,
     .imagemLivros {
         width: 100%;
     }
-    .textoApresentacao {
-        padding-right: 0;
+    .textoApresentacao p {
+        font-size: 19px;
     }
     .imagemLivros {
-        margin-top: 25px;
+        width: 100%;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+        justify-items: center;
+    }
+    .imagemLivros a {
+        width: 100%;
+        height: 240px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: none;
     }
     .imagemLivros img {
+        width: 100%;
+        height: 100%;
+        max-width: 170px;
+        object-fit: contain;
+    }
+    .imagemLivros a:nth-child(4) {
+        grid-column: auto;
+        transform: none;
+    }
+    .imagemLivros a:nth-child(5) {
+        grid-column: 1 / 3;
+        transform: none;
+    }
+    .autora {
+        width: 88%;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .imgAutora,
+    .textAutora {
+        width: 100%;
+    }
+    .imgAutora {
+        text-align: center;
+    }
+    .imgAutora img {
+        width: 80%;
+    }
+    .textAutora p {
+        font-size: 18px;
+    }
+    .saibaMais {
+        width: 88%;
+        flex-direction: column;
+        gap: 30px;
+    }
+    .outrasObras,
+    .redes {
+        width: 100%;
+    }
+    .outrasObras {
+        flex-wrap: wrap;
+    }
+    .outrasObras img {
+        width: 140px;
+    }
+    .pontaPe {
         width: 90%;
     }
-    .paginasCentrais > h1 {
-        font-size: 38px;
-        padding-left: 15px;
-        padding-right: 15px;
-        box-sizing: border-box;
+    .pontaPe p {
+        font-size: 11px;
+    }
+    #bussola {
+        width: 130px;
+    }
+    .entrada p {
+        font-size: 22px;
+    }
+    .entrada h1 {
+        font-size: 50px;
+    }
+    #divisao {
+        width: 250px;
+    }
+    button {
+        font-size: 20px;
+        padding: 9px 30px;
     }
 }
