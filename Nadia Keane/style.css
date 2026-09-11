@@ -429,7 +429,7 @@ nav a.ativo {
     width: min(950px, 90%);
     margin: 30px auto;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     gap: 30px;
 }
 
@@ -437,7 +437,7 @@ nav a.ativo {
 .redes {
     flex: 1 1 0;
     min-width: 0;
-    padding: 20px;
+    padding: 30px;
     box-sizing: border-box;
     border: 2px solid #6F4323;
     background-color: rgba(228, 201, 148, 0.75);
@@ -524,32 +524,159 @@ nav a.ativo {
 
 .redes a {
     width: 100%;
-    height: 60px;
+    height: 34px;
     margin: 15px auto;
     border: 2px solid #6F4323;
     border-radius: 40px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 40px;
+    justify-content: flex-start;
+    padding-left: 25px;
+    gap: 20px;
     text-decoration: none;
     color: #6F4323;
+    transition: 0.3s;
+}
+
+.redes a:hover {
+    background-color: #6F4323;
+    color: #e2cfc1;
+    transform: scale(1.03);
 }
 
 .redes img {
-    width: 45px;
-    height: 45px;
+    width: 24px;
+    height: 24px;
     object-fit: contain;
 }
 
 .redes a:first-of-type img {
-    width: 55px;
-    height: 55px;
+    width: 28px;
+    height: 28px;
 }
 
 .redes a span {
     font-family: "Cormorant Garamond", serif;
-    font-size: 20px;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.redes a:hover span {
+    color: #e2cfc1;
+}
+
+.livrosHistoria {
+    width: min(1100px, 92%);
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.livroItem {
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, 5vw, 30px);
+    padding: 10px;
+    box-sizing: border-box;
+    border: 2px solid #6F4323;
+    background-color: rgba(228, 201, 148, 0.75);
+}
+
+.livroItem:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.capaLivro {
+    width: 170px;
+    flex-shrink: 0;
+}
+
+.capaLivro img {
+    width: 100%;
+    height: auto;
+    display: block;
+    box-shadow: 8px 10px 18px rgba(0, 0, 0, 0.35);
+    transition:
+        transform 0.3s ease,
+        filter 0.3s ease;
+}
+
+.capaLivro:hover img {
+    transform: translateY(-8px) scale(1.04);
+    filter: drop-shadow(
+        0 8px 5px rgba(0, 0, 0, 0.25)
+    );
+}
+
+.infoLivro {
+    flex: 1;
+    min-width: 0;
+}
+
+.numeroLivro {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: #6F4323;
+}
+
+.infoLivro h2 {
+    margin: 0 0 12px;
+    color: #172929;
+    font-size: clamp(24px, 2.2vw, 32px);
+}
+
+.infoLivro > p {
+    margin: 0 0 20px;
+    font-size: clamp(16px, 1.2vw, 19px);
+    line-height: 1.5;
+    color: #172929;
+}
+
+.botaoSpoiler {
+    background-color: #6F4323;
+    color: #e2cfc1;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.botaoSpoiler:hover {
+    background-color: #8B4F27;
+}
+
+.setaSpoiler {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.botaoSpoiler.aberto .setaSpoiler {
+    transform: rotate(180deg);
+}
+
+.textoSpoiler {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.textoSpoiler p {
+    margin: 15px 0 0;
+    font-size: clamp(15px, 1.1vw, 17px);
+    line-height: 1.5;
+    color: #172929;
+}
+
+.textoSpoiler.aberto {
+    max-height: 400px;
 }
 
 @media (max-width: 1100px) {
@@ -736,5 +863,13 @@ nav a.ativo {
     button {
         font-size: 20px;
         padding: 9px 30px;
+    }
+    .livroItem,
+    .livroItem:nth-child(even) {
+        flex-direction: column;
+        text-align: center;
+    }
+    .capaLivro {
+        width: 65%;
     }
 }

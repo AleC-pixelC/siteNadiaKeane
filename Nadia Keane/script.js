@@ -21,8 +21,19 @@ function paginaPrincipal() {
         }, 100);
     }, 7000);
 
-    // abre a página depois da animação
     setTimeout(function () {
         window.location.href = "paginaPrincipal.html";
     }, 8000);
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const botoesSpoiler = document.querySelectorAll(".botaoSpoiler");
+
+    botoesSpoiler.forEach(function (botao) {
+        botao.addEventListener("click", function () {
+            const texto = botao.nextElementSibling;
+            botao.classList.toggle("aberto");
+            texto.classList.toggle("aberto");
+        });
+    });
+});
