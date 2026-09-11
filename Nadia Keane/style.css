@@ -732,6 +732,108 @@ nav a.ativo {
     }
 }
 
+.areaPersonagens {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.grupoPersonagens {
+    margin-bottom: 50px;
+}
+
+.tituloGrupo {
+    font-size: 1.4rem;
+    color: #5c2419;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding-left: 10px;
+    border-left: 4px solid #b8975e;
+}
+
+.gridPersonagens {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.cartaoPersonagem {
+    background: #fdfbf7;
+    border: 1px solid #d4c5a9;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.cartaoPersonagem:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.cartaoPersonagem:not(:has(.containerFoto)) {
+    border-top: 4px solid #b8975e;
+}
+
+.containerFoto {
+    position: relative;
+    width: 100%;
+    height: 260px;
+}
+
+.fotoPersonagem {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-bottom: 2px solid #e2d5b6;
+}
+
+.tagFuncao {
+    display: inline-block;
+    background: rgba(43, 31, 29, 0.85);
+    color: #f3edd7;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid #b8975e;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.containerFoto .tagFuncao {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.infoPersonagem > .tagFuncao {
+    align-self: flex-start;
+    margin-bottom: 10px;
+    background: #4a3b32;
+}
+
+.infoPersonagem {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.infoPersonagem h4 {
+    font-size: 1.1rem;
+    color: #2b1f1d;
+    margin-bottom: 8px;
+}
+
+.infoPersonagem p {
+    font-size: 0.85rem;
+    color: #5a493b;
+    line-height: 1.4;
+}
+
 @media (max-width: 768px) {
     header {
         position: relative;

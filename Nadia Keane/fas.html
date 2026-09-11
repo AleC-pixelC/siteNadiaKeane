@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="img/logo.png">
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-    <title>Diário de Bordo</title>
+    <link rel="stylesheet" href="styleFas.css">
+    <script src="script.js" defer></script>
+    <title>Diário de Bordo: Área dos fãs!</title>
 </head>
 <body class="paginasCentrais">
     <header>
@@ -19,3 +19,84 @@
             <a href="fas.html" class="ativo">ÁREA DOS FÃS</a>
         </nav>
     </header>
+    <main class="areaFas">
+            <section class="tituloFas">
+                <h2>ÁREA DOS FÃS</h2>
+            </section>
+
+            <div class="muralFas">
+                <aside class="perfilLeitor">
+                    <div class="cartaoLeitor">
+                        <img src="img/avatar-alex.jpg" alt="Foto de Perfil" class="foto-perfil-leitor">
+                        <h3>Alexandre</h3>
+                        <span class="usuario">@alex_keane</span>
+                    </div>
+                    
+                    <nav class="menuLeitor">
+                        <a href="#" class="itemLateral opcao-ativa">Mural</a>
+                        <a href="#" class="itemLateral">Meu perfil</a>
+                        <a href="#" class="itemLateral">Editar perfil</a>
+                        <a href="#" class="itemLateral">Sair</a>
+                    </nav>
+                </aside>
+                <section class="muralPublicacoes">
+                    <div class="novaPublicacao">
+                        <h3>Compartilhe com a comunidade</h3>
+                        <form action="/cadastrar_post" method="POST" enctype="multipart/form-data">
+                            <textarea name="conteudo" maxlength="500" placeholder="Escreva algo, compartilhe uma teoria, fanart ou apenas comente..." required></textarea>
+                            
+                            <div class="rodapePublicacao">
+                                <label for="upload-imagem" class="anexarMidia">Adicionar imagem</label>
+                                <input type="file" id="upload-imagem" name="imagem" accept="image/*" hidden>
+                                <button type="submit" class="publicarPost">Publicar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="divisorFas">
+                        <h3>Mural dos Fãs</h3>
+                    </div>
+                    <div class="publicacoesFas">
+                        <article class="cartaoPublicacao">
+                            <div class="cabecalhoPublicacao">
+                                <img src="img/avatar-lua.jpg" alt="Avatar" class="avatarAutor">
+                                <div>
+                                    <strong>luaescrita</strong>
+                                    <span class="tempoPublicacao">há 2 horas</span>
+                                </div>
+                            </div>
+                            <p class="texto-publicacao-fa">Terminei Hora dos Corvos e ainda estou sem palavras... Essa cena me destruiu de um jeito tão bom.</p>
+                            <img src="img/post-livro.jpg" alt="Imagem da publicação" class="midiaPublicacao">
+                            <div class="reacoesPublicacao">
+                                <button class="botao-Curtir">❤️ 24</button>
+                                <button class="botaoComentar">💬 6</button>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <aside class="coluna-destaques-comunidade">
+                    <div class="destaquefas">
+                        <h4>CONCURSO DE FANART</h4>
+                        <div class="concursoFanart">
+                            <span>CONCURSO DE FANART<br><em>Novos horizontes</em></span>
+                        </div>
+                        <a href="#" class="linkDestaque">Ver detalhes</a>
+                    </div>
+
+                    <div class="cartao-destaque-fas">
+                        <h4>FANARTS EM DESTAQUE</h4>
+                        <div class="galeriaFanarts">
+                            <img src="img/thumb1.jpg" alt="Fanart 1">
+                            <img src="img/thumb2.jpg" alt="Fanart 2">
+                            <img src="img/thumb3.jpg" alt="Fanart 3">
+                            <img src="img/thumb4.jpg" alt="Fanart 4">
+                        </div>
+                        <a href="#" class="link-detalhes-destaque">Ver mais fanarts &gt;</a>
+                    </div>
+                </aside>
+
+            </div>
+        </main>
+</body>
+</html>
