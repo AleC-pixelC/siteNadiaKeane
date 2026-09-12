@@ -1,0 +1,977 @@
+@font-face {
+    font-family: 'fonteCinzel';
+    src: url('fontes/CinzelDecorative-Regular.ttf') format('truetype');
+}
+* {
+    box-sizing: border-box;
+}
+html, body {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+}
+body {
+    font-family: "Cormorant Garamond", serif;
+    color: #172929;
+}
+p, h1, h2, h3, h4 {
+    font-family: "Cormorant Garamond", serif;
+}
+
+.entrada {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-image: url(img/fundo.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+#bussola {
+    width: 180px;
+    height: auto;
+    position: absolute;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#divisao {
+    position: relative;
+    width: 320px;
+    height: 30px;
+    margin: 5px auto 20px;
+}
+
+#divisao span {
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 25px);
+    height: 2px;
+    background-color: #6F4323;
+}
+
+#divisao span:first-child {
+    left: 0;
+}
+
+#divisao span:last-child {
+    right: 0;
+}
+
+#ancora {
+    width: 30px;
+    height: auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.entrada p {
+    margin-bottom: 5px;
+    font-size: 30px;
+    color: #172929;
+}
+
+.entrada h1 {
+    margin-top: auto;
+    margin-bottom: 0;
+    font-size: 80px;
+    color: #172929;
+}
+
+button {
+    margin-top: 30px;
+    background-color: #8B4F27;
+    color: #e2cfc1;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px 42px;
+    border: 2px solid #5E351C;
+    border-radius: 8px;
+    box-shadow:
+        inset 0 0 0 2px #B57A4A,
+        0 4px 7px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #9B5B30;
+    transform: scale(1.04);
+}
+
+.fumaca {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.fumaca span {
+    position: absolute;
+    width: 800px;
+    height: 380px;
+    background: radial-gradient(
+        ellipse,
+        rgba(255, 255, 255, 0.55) 20%,
+        rgba(255, 255, 255, 0.30) 60%,
+        rgba(255, 255, 255, 0) 75%
+    );
+    filter: blur(35px);
+    opacity: 0;
+    animation: moverFumaca 12s linear infinite;
+}
+
+.fumaca span:nth-child(1) {
+    bottom: 10%;
+    left: -650px;
+    animation-delay: 0s;
+}
+
+.fumaca span:nth-child(2) {
+    bottom: 30%;
+    left: -650px;
+    animation-delay: 4s;
+}
+
+.fumaca span:nth-child(3) {
+    bottom: 60%;
+    left: -650px;
+    animation-delay: 8s;
+}
+
+@keyframes moverFumaca {
+    0% {
+        transform: translateX(0) scale(0.8);
+        opacity: 0;
+    }
+    15% {
+        opacity: 0.8;
+    }
+    70% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateX(calc(100vw + 1300px)) scale(1.4);
+        opacity: 0;
+    }
+}
+
+#transicaoMar {
+    position: fixed;
+    left: 0;
+    bottom: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to top,
+        #172929,
+        rgba(23, 41, 41, 0.85),
+        rgba(23, 41, 41, 0)
+    );
+    z-index: 1000;
+    pointer-events: none;
+}
+
+#transicaoMar.entrando {
+    animation: subirMar 2s ease forwards;
+}
+
+@keyframes subirMar {
+    from {
+        bottom: -100%;
+    }
+    to {
+        bottom: 0;
+    }
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #c7d3d0;
+    border-bottom: 1px solid rgba(23, 41, 41, 0.25);
+    box-shadow:
+        0 5px 8px rgba(0, 0, 0, 0.10);
+    padding: 5px 15px;
+    z-index: 100;
+}
+
+header h2 {
+    margin: 0 20px;
+    color: #172929;
+    font-size: clamp(22px, 2vw, 30px);
+    white-space: nowrap;
+    text-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.5),
+        0 2px 3px rgba(0, 0, 0, 0.12);
+}
+
+nav {
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, 2vw, 25px);
+}
+
+nav a {
+    text-decoration: none;
+    color: #172929;
+    font-size: clamp(15px, 1.3vw, 20px);
+    white-space: nowrap;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #6F4323;
+}
+
+nav a.ativo {
+    font-weight: bold;
+    border-bottom: 3px solid #6F4323;
+    padding-bottom: 5px;
+}
+
+.paginasCentrais {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-image: url(img/fundoPrincipal.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    overflow-x: hidden;
+}
+
+.paginasCentrais > h1 {
+    width: 100%;
+    margin: 0;
+    padding-top: 80px;
+    text-align: center;
+    color: #172929;
+    font-size: clamp(38px, 4vw, 55px);
+    line-height: 1;
+}
+
+
+#principalDiv {
+    width: min(1400px, 92%);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: clamp(20px, 4vw, 60px);
+    padding: 30px 0;
+}
+
+.textoApresentacao {
+    width: 50%;
+}
+
+.textoApresentacao p {
+    margin: 0;
+    color: #6F4323;
+    font-size: clamp(25px, 1.5vw, 35px);
+    line-height: 1.5;
+    text-align: justify;
+}
+
+.imagemLivros {
+    width: 50%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    justify-items: center;
+    align-items: center;
+}
+
+.imagemLivros a {
+    width: 100%;
+    height: 260px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.imagemLivros img {
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    object-fit: contain;
+    transition:
+        transform 0.3s ease,
+        filter 0.3s ease;
+}
+
+.imagemLivros a:hover img {
+    transform: translateY(-8px) scale(1.04);
+    filter: drop-shadow(
+        0 8px 5px rgba(0, 0, 0, 0.25)
+    );
+}
+
+.imagemLivros a:nth-child(4) {
+    grid-column: 1 / 2;
+    transform: translateX(55%);
+}
+
+.imagemLivros a:nth-child(5) {
+    grid-column: 3 / 4;
+    transform: translateX(-55%);
+}
+
+.pontaPe {
+    width: 95%;
+    margin: auto auto 10px;
+}
+
+.pontaPe p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.3;
+    text-align: justify;
+    color: #172929;
+}
+
+.autora {
+    width: min(1200px, 85%);
+    margin: 30px auto;
+    display: flex;
+    align-items: center;
+    gap: clamp(30px, 5vw, 70px);
+}
+
+.imgAutora {
+    width: 30%;
+    padding: 14px;
+    box-sizing: border-box;
+    background-color: #B57A4A;
+    border: 5px solid #172929;
+    box-shadow:
+        0 0 0 2px #B57A4A,
+        0 0 0 7px #172929,
+        8px 10px 18px rgba(0, 0, 0, 0.30);
+    position: relative;
+}
+
+.imgAutora::before {
+    content: "⚓";
+    position: absolute;
+    top: -25px;
+    left: -25px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #B57A4A;
+    background-color: #172929;
+    border: 2px solid #B57A4A;
+    border-radius: 50%;
+    font-size: 20px;
+}
+
+.imgAutora::after {
+    content: "⚓";
+    position: absolute;
+    bottom: -25px;
+    right: -25px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #B57A4A;
+    background-color: #172929;
+    border: 2px solid #B57A4A;
+    border-radius: 50%;
+    font-size: 20px;
+}
+
+.imgAutora img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 2px solid #6F4323;
+}
+
+.textAutora {
+    width: 65%;
+}
+
+.textAutora p {
+    margin: 0;
+    font-size: clamp(18px, 1.4vw, 22px);
+    line-height: 1.5;
+    text-align: justify;
+    color: #6F4323;
+}
+
+.saibaMais {
+    width: min(950px, 90%);
+    margin: 30px auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.listaObras,
+.redes {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 30px;
+    box-sizing: border-box;
+    border: 2px solid #6F4323;
+    background-color: rgba(228, 201, 148, 0.75);
+}
+
+.listaObras h3,
+.redes h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #172929;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 22px;
+}
+
+.listaObras {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 15px 20px;
+    align-items: stretch;
+}
+
+.listaObras > h3 {
+    grid-column: 1 / -1;
+}
+
+.obra {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+}
+
+.obra:first-of-type {
+    grid-column: 1;
+}
+
+.obra:last-of-type {
+    grid-column: 3;
+}
+
+.obra a {
+    width: 100%;
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.obra img {
+    width: 100%;
+    height: 100%;
+    max-width: 160px;
+    object-fit: contain;
+    transition:
+        transform 0.3s ease,
+        filter 0.3s ease;
+}
+
+.obra a:hover img {
+    transform: translateY(-8px) scale(1.04);
+    filter: drop-shadow(
+        0 8px 5px rgba(0, 0, 0, 0.25)
+    );
+}
+
+.obra p {
+    margin: 6px 0 0;
+    color: #172929;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 16px;
+    line-height: 1.25;
+    max-width: 160px;
+}
+
+.divisorObras {
+    grid-column: 2;
+    width: 2px;
+    background-color: #6F4323;
+    opacity: 0.5;
+    justify-self: center;
+}
+
+.redes a {
+    width: 100%;
+    height: 34px;
+    margin: 15px auto;
+    border: 2px solid #6F4323;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 25px;
+    gap: 20px;
+    text-decoration: none;
+    color: #6F4323;
+    transition: 0.3s;
+}
+
+.redes a:hover {
+    background-color: #6F4323;
+    color: #e2cfc1;
+    transform: scale(1.03);
+}
+
+.redes img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.redes a:first-of-type img {
+    width: 28px;
+    height: 28px;
+}
+
+.redes a span {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.redes a:hover span {
+    color: #e2cfc1;
+}
+
+.livrosHistoria {
+    width: min(1100px, 92%);
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.livroItem {
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, 5vw, 30px);
+    padding: 10px;
+    box-sizing: border-box;
+    border: 2px solid #6F4323;
+    background-color: rgba(228, 201, 148, 0.75);
+}
+
+.livroItem:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.capaLivro {
+    width: 170px;
+    flex-shrink: 0;
+}
+
+.capaLivro img {
+    width: 100%;
+    height: auto;
+    display: block;
+    box-shadow: 8px 10px 18px rgba(0, 0, 0, 0.35);
+    transition:
+        transform 0.3s ease,
+        filter 0.3s ease;
+}
+
+.capaLivro:hover img {
+    transform: translateY(-8px) scale(1.04);
+    filter: drop-shadow(
+        0 8px 5px rgba(0, 0, 0, 0.25)
+    );
+}
+
+.infoLivro {
+    flex: 1;
+    min-width: 0;
+}
+
+.numeroLivro {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: #6F4323;
+}
+
+.infoLivro h2 {
+    margin: 0 0 12px;
+    color: #172929;
+    font-size: clamp(24px, 2.2vw, 32px);
+}
+
+.infoLivro > p {
+    margin: 0 0 20px;
+    font-size: clamp(16px, 1.2vw, 19px);
+    line-height: 1.5;
+    color: #172929;
+}
+
+.botaoSpoiler {
+    background-color: #6F4323;
+    color: #e2cfc1;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.botaoSpoiler:hover {
+    background-color: #8B4F27;
+}
+
+.setaSpoiler {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.botaoSpoiler.aberto .setaSpoiler {
+    transform: rotate(180deg);
+}
+
+.textoSpoiler {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.textoSpoiler p {
+    margin: 15px 0 0;
+    font-size: clamp(15px, 1.1vw, 17px);
+    line-height: 1.5;
+    color: #172929;
+}
+
+.textoSpoiler.aberto {
+    max-height: 400px;
+}
+
+@media (max-width: 1100px) {
+    header {
+        padding: 5px 10px;
+    }
+    header h2 {
+        margin-left: 10px;
+        margin-right: 15px;
+    }
+    nav {
+        gap: 14px;
+        margin-right: 5px;
+    }
+    nav a {
+        font-size: 16px;
+    }
+    #principalDiv {
+        width: 94%;
+        gap: 25px;
+    }
+    .textoApresentacao p {
+        font-size: 20px;
+    }
+    .imagemLivros {
+        gap: 12px;
+    }
+    .imagemLivros a {
+        height: 220px;
+    }
+    .imagemLivros img {
+        width: 100%;
+        height: 100%;
+        max-width: 155px;
+        object-fit: contain;
+    }
+    .imagemLivros a:nth-child(4) {
+        transform: translateX(50%);
+    }
+    .imagemLivros a:nth-child(5) {
+        transform: translateX(-50%);
+    }
+    .autora {
+        width: 90%;
+        gap: 30px;
+    }
+    .saibaMais {
+        width: 90%;
+        gap: 30px;
+    }
+    .obra img {
+        width: 140px;
+    }
+}
+
+.areaPersonagens {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.grupoPersonagens {
+    margin-bottom: 50px;
+}
+
+.tituloGrupo {
+    font-size: 1.4rem;
+    color: #5c2419;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding-left: 10px;
+    border-left: 4px solid #b8975e;
+}
+
+.gridPersonagens {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.cartaoPersonagem {
+    background: #fdfbf7;
+    border: 1px solid #d4c5a9;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.cartaoPersonagem:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.cartaoPersonagem:not(:has(.containerFoto)) {
+    border-top: 4px solid #b8975e;
+}
+
+.containerFoto {
+    position: relative;
+    width: 100%;
+    height: 260px;
+}
+
+.fotoPersonagem {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-bottom: 2px solid #e2d5b6;
+}
+
+.tagFuncao {
+    display: inline-block;
+    background: rgba(43, 31, 29, 0.85);
+    color: #f3edd7;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid #b8975e;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.containerFoto .tagFuncao {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.infoPersonagem > .tagFuncao {
+    align-self: flex-start;
+    margin-bottom: 10px;
+    background: #4a3b32;
+}
+
+.infoPersonagem {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.infoPersonagem h4 {
+    font-size: 1.1rem;
+    color: #2b1f1d;
+    margin-bottom: 8px;
+}
+
+.infoPersonagem p {
+    font-size: 0.85rem;
+    color: #5a493b;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    header {
+        position: relative;
+        flex-direction: column;
+        padding: 8px;
+    }
+    header h2 {
+        margin: 0 0 8px;
+        font-size: 24px;
+    }
+    nav {
+        width: 100%;
+        margin: 0;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px 15px;
+    }
+    nav a {
+        font-size: 14px;
+    }
+    .paginasCentrais > h1 {
+        padding-top: 30px;
+        padding-left: 15px;
+        padding-right: 15px;
+        font-size: 38px;
+    }
+    #principalDiv {
+        width: 90%;
+        flex-direction: column;
+        padding: 20px 0;
+        gap: 25px;
+    }
+    .textoApresentacao,
+    .imagemLivros {
+        width: 100%;
+    }
+    .textoApresentacao p {
+        font-size: 19px;
+    }
+    .imagemLivros {
+        width: 100%;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+        justify-items: center;
+    }
+    .imagemLivros a {
+        width: 100%;
+        height: 240px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: none;
+    }
+    .imagemLivros img {
+        width: 100%;
+        height: 100%;
+        max-width: 170px;
+        object-fit: contain;
+    }
+    .imagemLivros a:nth-child(4) {
+        grid-column: auto;
+        transform: none;
+    }
+    .imagemLivros a:nth-child(5) {
+        grid-column: 1 / 3;
+        transform: none;
+    }
+    .autora {
+        width: 88%;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .imgAutora,
+    .textAutora {
+        width: 100%;
+    }
+    .imgAutora {
+        text-align: center;
+    }
+    .imgAutora img {
+        width: 80%;
+    }
+    .textAutora p {
+        font-size: 18px;
+    }
+    .saibaMais {
+        width: 88%;
+        flex-direction: column;
+        gap: 30px;
+    }
+    .listaObras,
+    .redes {
+        width: 100%;
+    }
+    .listaObras {
+        grid-template-columns: 1fr;
+    }
+    .obra:first-of-type,
+    .obra:last-of-type {
+        grid-column: 1;
+    }
+    .obra img {
+        width: 140px;
+    }
+    .divisorObras {
+        grid-column: 1;
+        width: 60%;
+        height: 2px;
+        justify-self: center;
+    }
+    .pontaPe {
+        width: 90%;
+    }
+    .pontaPe p {
+        font-size: 11px;
+    }
+    #bussola {
+        width: 130px;
+    }
+    .entrada p {
+        font-size: 22px;
+    }
+    .entrada h1 {
+        font-size: 50px;
+    }
+    #divisao {
+        width: 250px;
+    }
+    button {
+        font-size: 20px;
+        padding: 9px 30px;
+    }
+    .livroItem,
+    .livroItem:nth-child(even) {
+        flex-direction: column;
+        text-align: center;
+    }
+    .capaLivro {
+        width: 65%;
+    }
+}
