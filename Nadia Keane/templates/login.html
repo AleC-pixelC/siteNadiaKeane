@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <title>Diário de Bordo: Entrar</title>
+</head>
+<body class="paginasCentrais">
+    <header>
+        <h2>NADIA KEANE</h2>
+        <nav>
+            <a href="{{ url_for('pagina_principal') }}">INÍCIO</a>
+            <a href="{{ url_for('autora') }}">CONHEÇA A AUTORA</a>
+            <a href="{{ url_for('personagens') }}">PERSONAGENS</a>
+            <a href="{{ url_for('historia') }}">HISTÓRIA</a>
+            <a href="{{ url_for('fas') }}">ÁREA DOS FÃS</a>
+        </nav>
+    </header>
+
+    <div class="formAuth">
+        <h1>ENTRAR</h1>
+
+        {% with mensagens = get_flashed_messages() %}
+            {% if mensagens %}
+                <div class="avisoAuth">
+                    {% for mensagem in mensagens %}
+                        <p>{{ mensagem }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+            <input type="hidden" name="proxima" value="{{ proxima }}">
+            <label for="identificador">E-mail ou nome de usuário</label>
+            <input type="text" id="identificador" name="identificador" required>
+
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" required>
+
+            <button type="submit">ENTRAR</button>
+        </form>
+
+        <p>Ainda não tem conta? <a href="{{ url_for('cadastro') }}">Cadastre-se</a></p>
+    </div>
+
+    <div class="pontaPe">
+        <p>
+            Este site foi criado de fã para fã, sem fins comerciais.
+            Todos os direitos relacionados a Nadia Keane, seus personagens,
+            universo e demais elementos da obra pertencem à Ana Jeckel,
+            criadora desse mundo e autora dos livros.
+        </p>
+    </div>
+</body>
+</html>

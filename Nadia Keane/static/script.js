@@ -22,7 +22,7 @@ function paginaPrincipal() {
     }, 7000);
 
     setTimeout(function () {
-        window.location.href = "paginaPrincipal.html";
+        window.location.href = "/inicio";
     }, 8000);
 }
 

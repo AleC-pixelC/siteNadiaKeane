@@ -1,4 +1,5 @@
 import sqlite3
+from werkzeug.security import generate_password_hash
 
 conexao = sqlite3.connect("bancoNK.db")
 cursor = conexao.cursor()
@@ -41,9 +42,10 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS curtidas (
                 FOREIGN KEY (idUsuario) REFERENCES usuarios(idUsuario)
                 )""")
 
+senha_hash = generate_password_hash('senha123')
 cursor.execute("""INSERT INTO usuarios (nomeUsuario, nomeCadastroUsuario, emailUsuario, senhaUsuario)
-                VALUES ('Axx', 'Axx_Nk', 'axxcnk@email.com', 'senha123')
-                """)
+                VALUES ('Axx', 'Axx_Nk', 'axxcnk@email.com', ?)
+                """, (senha_hash,))
 
 conexao.commit()
 conexao.close()

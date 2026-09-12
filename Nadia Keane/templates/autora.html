@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <title>Diário de Bordo: Ana Jeckel</title>
@@ -12,11 +12,11 @@
     <header>
         <h2>NADIA KEANE</h2>
         <nav>
-            <a href="paginaPrincipal.html">INÍCIO</a>
-            <a href="autora.html" class="ativo">CONHEÇA A AUTORA</a>
-            <a href="personagens.html">PERSONAGENS</a>
-            <a href="historia.html">HISTÓRIA</a>
-            <a href="fas.html">ÁREA DOS FÃS</a>
+            <a href="{{ url_for('pagina_principal') }}">INÍCIO</a>
+            <a href="{{ url_for('autora') }}" class="ativo">CONHEÇA A AUTORA</a>
+            <a href="{{ url_for('personagens') }}">PERSONAGENS</a>
+            <a href="{{ url_for('historia') }}">HISTÓRIA</a>
+            <a href="{{ url_for('fas') }}">ÁREA DOS FÃS</a>
         </nav>
     </header>
 
@@ -25,7 +25,7 @@
     </h1>
     <div class="autora">
         <div class="imgAutora">
-            <img src="img/nalu.jpg" alt="Nalu, a capitã">
+            <img src="{{ url_for('static', filename='img/nalu.jpg') }}\" alt="Nalu, a capitã">
         </div>
         <div class="textAutora">
             <h2>Ana Jeckel</h2>
@@ -46,7 +46,7 @@ Em seu tempo livre, Ana estuda design de animação na faculdade, toca em uma ba
                     <a href="https://www.amazon.com.br/Hora-dos-Corvos-conto-Atlas-ebook/dp/B0CXH697SH/ref=sr_1_1?crid=3SEJJDGGH4M0V&dib=eyJ2IjoiMSJ9.BKMOSNwnErI414D4TYxi16xfnIBpbYlsY15W2yo40FIXImNfkvPwF6WQObddnoFboIUI8wPG0XNYFZLJJD9zEtBgNXP50powsaGqAPk9IbfFTfq1g3NySAnNz85HW9JbEQV_MhgMdE8081Vaef2BRl0qSRBc_aXWnU_WqRHvFkuBvfkWFpkkd5W0B1EqzfzhVHcP6OtK_aQB12phpPVrrCOChGt_md_Y9mOU6TV2FrU.YcDTfiO2tM1Xmgd99e7nB5MQCh89h3MoVWDRRxRrRVk&dib_tag=se&keywords=hora+dos+corvos&qid=1789052013&sprefix=hora+dos+%2Caps%2C247&sr=8-1" target="_blank"
                     rel="noopener noreferrer"
                 >
-                        <img src="img/horaDosCorvos.png" alt="Hora dos Corvos">
+                        <img src="{{ url_for('static', filename='img/horaDosCorvos.png') }}\" alt="Hora dos Corvos">
                     </a>
                     <p>Hora dos Corvos</p>
                 </div>
@@ -55,7 +55,7 @@ Em seu tempo livre, Ana estuda design de animação na faculdade, toca em uma ba
                     <a href="https://www.amazon.com.br/dp/6586733715?ref=cm_sw_r_ffobk_cp_ud_dp_MVXZ30XBK8RZPHJX5AXC&ref_=cm_sw_r_ffobk_cp_ud_dp_MVXZ30XBK8RZPHJX5AXC&social_share=cm_sw_r_ffobk_cp_ud_dp_MVXZ30XBK8RZPHJX5AXC&bestFormat=true" target="_blank"
                     rel="noopener noreferrer"
                 >
-                        <img src="img/kiwi.jpg" alt="Kiwi e os Garotos Perdidos da Praia da Caveira">
+                        <img src="{{ url_for('static', filename='img/kiwi.jpg') }}\" alt="Kiwi e os Garotos Perdidos da Praia da Caveira">
                     </a>
                     <p>Kiwi e os Garotos Perdidos da Praia da Caveira</p>
                 </div>
@@ -64,27 +64,27 @@ Em seu tempo livre, Ana estuda design de animação na faculdade, toca em uma ba
         <div class="redes">
             <h3>SIGA ELA NAS REDES:</h3>
             <a href="https://anajeckel.com.br/" target="_blank">
-                <img src="img/globe.png" alt="Site oficial">
+                <img src="{{ url_for('static', filename='img/globe.png') }}\" alt="Site oficial">
                 <span>SITE</span>
             </a>
             <a href="https://www.youtube.com/@anajeckell" target="_blank">
-                <img src="img/youtube.png" alt="YouTube">
+                <img src="{{ url_for('static', filename='img/youtube.png') }}\" alt="YouTube">
                 <span>YOUTUBE</span>
             </a>
             <a href="https://www.instagram.com/anajeckell" target="_blank">
-                <img src="img/instagram.png" alt="Instagram">
+                <img src="{{ url_for('static', filename='img/instagram.png') }}\" alt="Instagram">
                 <span>INSTAGRAM</span>
             </a>
             <a href="https://x.com/AnaJeckell" target="_blank">
-                <img src="img/twitter.png" alt="Instagram">
+                <img src="{{ url_for('static', filename='img/twitter.png') }}\" alt="Instagram">
                 <span>TWITTER</span>
             </a>
             <a href="https://www.tiktok.com/@anajeckell" target="_blank">
-                <img src="img/tiktok.png" alt="YouTube">
+                <img src="{{ url_for('static', filename='img/tiktok.png') }}\" alt="YouTube">
                 <span>TIK TOK</span>
             </a>
             <a href="https://open.spotify.com/playlist/7D2dMVGEi2WFwItZK52jSK?si=f749a27fa84a487d&nd=1&dlsi=7c55a30c355248e4" target="_blank">
-                <img src="img/spotify.png" alt="YouTube">
+                <img src="{{ url_for('static', filename='img/spotify.png') }}\" alt="YouTube">
                 <span>SPOTIFY</span>
             </a>
         </div>

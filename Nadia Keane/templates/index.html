@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <title>Entrar</title>
@@ -15,17 +15,17 @@
             <span></span>
             <span></span>
         </div>
-        <img src="img/bussola.svg" id="bussola" alt="Bússola">
+        <img src="{{ url_for('static', filename='img/bussola.svg') }}\" id="bussola" alt="Bússola">
         <p>DIÁRIO DE BORDO DO</p>
         <h1>NADIA KEANE</h1>
         <div id="divisao">
             <span></span>
-            <img src="img/ancora.svg" id="ancora" alt="Âncora">
+            <img src="{{ url_for('static', filename='img/ancora.svg') }}\" id="ancora" alt="Âncora">
             <span></span>
         </div>
         <div id="transicaoMar"></div>
         <audio id="somMar" preload="auto">
-            <source src="somMar.mp3" type="audio/mpeg">
+            <source src="{{ url_for('static', filename='somMar.mp3') }}" type="audio/mpeg">
         </audio>
         <button class="entrar" onclick="paginaPrincipal()">
             EMBARCAR ↦

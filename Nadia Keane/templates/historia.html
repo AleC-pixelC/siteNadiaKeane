@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="img/logo.png">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">    <script src="script.js"></script>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <title>Diário de Bordo: Sobre a História</title>
 </head>
@@ -12,11 +12,11 @@
     <header>
         <h2>NADIA KEANE</h2>
         <nav>
-            <a href="paginaPrincipal.html">INÍCIO</a>
-            <a href="autora.html">CONHEÇA A AUTORA</a>
-            <a href="personagens.html">PERSONAGENS</a>
-            <a href="historia.html" class="ativo">HISTÓRIA</a>
-            <a href="fas.html">ÁREA DOS FÃS</a>
+            <a href="{{ url_for('pagina_principal') }}">INÍCIO</a>
+            <a href="{{ url_for('autora') }}">CONHEÇA A AUTORA</a>
+            <a href="{{ url_for('personagens') }}">PERSONAGENS</a>
+            <a href="{{ url_for('historia') }}" class="ativo">HISTÓRIA</a>
+            <a href="{{ url_for('fas') }}">ÁREA DOS FÃS</a>
         </nav>
     </header>
     <h1>A HISTÓRIA DOS SAQUEADORES DA BARRA</h1>
@@ -24,7 +24,7 @@
 
         <div class="livroItem">
             <div class="capaLivro">
-                <img src="img/NK1.jpg" alt="Nadia Keane 1: O Tesouro Roubado">
+                <img src="{{ url_for('static', filename='img/NK1.jpg') }}\" alt="Nadia Keane 1: O Tesouro Roubado">
             </div>
             <div class="infoLivro">
                 <span class="numeroLivro">LIVRO I</span>
@@ -43,7 +43,7 @@
 
         <div class="livroItem">
             <div class="capaLivro">
-                <img src="img/NK2.jpg" alt="Nadia Keane 2: Adentrando o Mar Oculto">
+                <img src="{{ url_for('static', filename='img/NK2.jpg') }}\" alt="Nadia Keane 2: Adentrando o Mar Oculto">
             </div>
             <div class="infoLivro">
                 <span class="numeroLivro">LIVRO II</span>
@@ -62,7 +62,7 @@
 
         <div class="livroItem">
             <div class="capaLivro">
-                <img src="img/NK3.jpg" alt="Nadia Keane 3: A Corrida das Ilhas Gêmeas">
+                <img src="{{ url_for('static', filename='img/NK3.jpg') }}\" alt="Nadia Keane 3: A Corrida das Ilhas Gêmeas">
             </div>
             <div class="infoLivro">
                 <span class="numeroLivro">LIVRO III</span>
@@ -81,7 +81,7 @@
 
         <div class="livroItem">
             <div class="capaLivro">
-                <img src="img/NK4.jpg" alt="Nadia Keane 4: A Caverna de Mil-Sóis">
+                <img src="{{ url_for('static', filename='img/NK4.jpg') }}\" alt="Nadia Keane 4: A Caverna de Mil-Sóis">
             </div>
             <div class="infoLivro">
                 <span class="numeroLivro">LIVRO IV</span>
@@ -100,7 +100,7 @@
 
         <div class="livroItem">
             <div class="capaLivro">
-                <img src="img/NK5.jpg" alt="Nadia Keane 5: A Maldição de Olho-Rubro">
+                <img src="{{ url_for('static', filename='img/NK5.jpg') }}\" alt="Nadia Keane 5: A Maldição de Olho-Rubro">
             </div>
             <div class="infoLivro">
                 <span class="numeroLivro">LIVRO V</span>

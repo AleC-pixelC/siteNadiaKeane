@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styleFas.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <title>Diário de Bordo: Área dos fãs!</title>
@@ -12,91 +12,134 @@
     <header>
         <h2>NADIA KEANE</h2>
         <nav>
-            <a href="paginaPrincipal.html">INÍCIO</a>
-            <a href="autora.html">CONHEÇA A AUTORA</a>
-            <a href="personagens.html">PERSONAGENS</a>
-            <a href="historia.html">HISTÓRIA</a>
-            <a href="fas.html" class="ativo">ÁREA DOS FÃS</a>
+            <a href="{{ url_for('pagina_principal') }}">INÍCIO</a>
+            <a href="{{ url_for('autora') }}">CONHEÇA A AUTORA</a>
+            <a href="{{ url_for('personagens') }}">PERSONAGENS</a>
+            <a href="{{ url_for('historia') }}">HISTÓRIA</a>
+            <a href="{{ url_for('fas') }}" class="ativo">ÁREA DOS FÃS</a>
         </nav>
     </header>
     <main class="areaFas">
-            <section class="tituloFas">
-                <h2>ÁREA DOS FÃS</h2>
-            </section>
+        <section class="tituloFas">
+            <h2>ÁREA DOS FÃS</h2>
+        </section>
 
-            <div class="muralFas">
-                <aside class="perfilLeitor">
+        {% with mensagens = get_flashed_messages() %}
+            {% if mensagens %}
+                <div class="avisoAuth">
+                    {% for mensagem in mensagens %}
+                        <p>{{ mensagem }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="muralFas">
+            <aside class="perfilLeitor">
+                {% if usuario_logado %}
                     <div class="cartaoLeitor">
-                        <img src="img/avatar-alex.jpg" alt="Foto de Perfil" class="foto-perfil-leitor">
-                        <h3>Alexandre</h3>
-                        <span class="usuario">@alex_keane</span>
+                        <h3>{{ usuario_logado }}</h3>
+                        <span class="usuario">Bem-vindo(a) de volta!</span>
                     </div>
-                    
                     <nav class="menuLeitor">
-                        <a href="#" class="itemLateral opcao-ativa">Mural</a>
-                        <a href="#" class="itemLateral">Meu perfil</a>
-                        <a href="#" class="itemLateral">Editar perfil</a>
-                        <a href="#" class="itemLateral">Sair</a>
+                        <a href="{{ url_for('fas') }}" class="itemLateral opcao-ativa">Mural</a>
+                        <a href="{{ url_for('logout') }}" class="itemLateral">Sair</a>
                     </nav>
-                </aside>
-                <section class="muralPublicacoes">
-                    <div class="novaPublicacao">
-                        <h3>Compartilhe com a comunidade</h3>
-                        <form action="/cadastrar_post" method="POST" enctype="multipart/form-data">
+                {% else %}
+                    <div class="cartaoLeitor">
+                        <h3>Visitante</h3>
+                        <span class="usuario">Você não está logado</span>
+                    </div>
+                    <nav class="menuLeitor">
+                        <a href="{{ url_for('login') }}" class="itemLateral opcao-ativa">Entrar</a>
+                        <a href="{{ url_for('cadastro') }}" class="itemLateral">Cadastrar</a>
+                    </nav>
+                {% endif %}
+            </aside>
+
+            <section class="muralPublicacoes">
+                <div class="novaPublicacao">
+                    <h3>Compartilhe com a comunidade</h3>
+                    {% if usuario_logado %}
+                        <form action="{{ url_for('cadastrar_post') }}" method="POST" enctype="multipart/form-data">
                             <textarea name="conteudo" maxlength="500" placeholder="Escreva algo, compartilhe uma teoria, fanart ou apenas comente..." required></textarea>
-                            
+
                             <div class="rodapePublicacao">
                                 <label for="upload-imagem" class="anexarMidia">Adicionar imagem</label>
                                 <input type="file" id="upload-imagem" name="imagem" accept="image/*" hidden>
                                 <button type="submit" class="publicarPost">Publicar</button>
                             </div>
                         </form>
-                    </div>
+                    {% else %}
+                        <p class="avisoLogin">
+                            <a href="{{ url_for('login', proxima=url_for('fas')) }}">Faça login</a>
+                            ou <a href="{{ url_for('cadastro') }}">cadastre-se</a> para publicar no mural.
+                        </p>
+                    {% endif %}
+                </div>
 
-                    <div class="divisorFas">
-                        <h3>Mural dos Fãs</h3>
-                    </div>
-                    <div class="publicacoesFas">
+                <div class="divisorFas">
+                    <h3>Mural dos Fãs</h3>
+                </div>
+                <div class="publicacoesFas">
+                    {% for post in posts %}
                         <article class="cartaoPublicacao">
                             <div class="cabecalhoPublicacao">
-                                <img src="img/avatar-lua.jpg" alt="Avatar" class="avatarAutor">
                                 <div>
-                                    <strong>luaescrita</strong>
-                                    <span class="tempoPublicacao">há 2 horas</span>
+                                    <strong>{{ post.nomeCadastroUsuario }}</strong>
+                                    <span class="tempoPublicacao">{{ post.dataPost }}</span>
                                 </div>
                             </div>
-                            <p class="texto-publicacao-fa">Terminei Hora dos Corvos e ainda estou sem palavras... Essa cena me destruiu de um jeito tão bom.</p>
-                            <img src="img/post-livro.jpg" alt="Imagem da publicação" class="midiaPublicacao">
+                            <p class="texto-publicacao-fa">{{ post.conteudo }}</p>
+                            {% if post.imagem %}
+                                <img src="{{ url_for('static', filename=post.imagem) }}" alt="Imagem da publicação" class="midiaPublicacao">
+                            {% endif %}
                             <div class="reacoesPublicacao">
-                                <button class="botao-Curtir">❤️ 24</button>
-                                <button class="botaoComentar">💬 6</button>
+                                {% if usuario_logado %}
+                                    <form action="{{ url_for('curtir_post', id_post=post.idPost) }}" method="POST" style="display:inline;">
+                                        <button type="submit" class="botao-Curtir">
+                                            {% if post.idPost in curtidas_usuario %}❤️{% else %}🤍{% endif %} {{ post.totalCurtidas }}
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <a href="{{ url_for('login', proxima=url_for('fas')) }}" class="botao-Curtir">🤍 {{ post.totalCurtidas }}</a>
+                                {% endif %}
+                                <span class="botaoComentar">💬 {{ post.totalComentarios }}</span>
                             </div>
+
+                            <div class="listaComentarios">
+                                {% for comentario in comentarios_por_post.get(post.idPost, []) %}
+                                    <p><strong>{{ comentario.nomeCadastroUsuario }}:</strong> {{ comentario.textComentarios }}</p>
+                                {% endfor %}
+                            </div>
+
+                            {% if usuario_logado %}
+                                <form action="{{ url_for('comentar_post', id_post=post.idPost) }}" method="POST" class="formComentario">
+                                    <input type="text" name="texto_comentario" placeholder="Escreva um comentário..." maxlength="300" required>
+                                    <button type="submit" class="publicarPost">Comentar</button>
+                                </form>
+                            {% else %}
+                                <p class="avisoLogin">
+                                    <a href="{{ url_for('login', proxima=url_for('fas')) }}">Faça login</a> para comentar.
+                                </p>
+                            {% endif %}
                         </article>
-                    </div>
-                </section>
+                    {% else %}
+                        <p>Ainda não há publicações. Seja o primeiro a compartilhar algo!</p>
+                    {% endfor %}
+                </div>
+            </section>
 
-                <aside class="coluna-destaques-comunidade">
-                    <div class="destaquefas">
-                        <h4>CONCURSO DE FANART</h4>
-                        <div class="concursoFanart">
-                            <span>CONCURSO DE FANART<br><em>Novos horizontes</em></span>
-                        </div>
-                        <a href="#" class="linkDestaque">Ver detalhes</a>
+            <aside class="coluna-destaques-comunidade">
+                <div class="destaquefas">
+                    <h4>CONCURSO DE FANART</h4>
+                    <div class="concursoFanart">
+                        <span>CONCURSO DE FANART<br><em>Novos horizontes</em></span>
                     </div>
-
-                    <div class="cartao-destaque-fas">
-                        <h4>FANARTS EM DESTAQUE</h4>
-                        <div class="galeriaFanarts">
-                            <img src="img/thumb1.jpg" alt="Fanart 1">
-                            <img src="img/thumb2.jpg" alt="Fanart 2">
-                            <img src="img/thumb3.jpg" alt="Fanart 3">
-                            <img src="img/thumb4.jpg" alt="Fanart 4">
-                        </div>
-                        <a href="#" class="link-detalhes-destaque">Ver mais fanarts &gt;</a>
-                    </div>
-                </aside>
-
-            </div>
-        </main>
+                    <a href="#" class="linkDestaque">Ver detalhes</a>
+                </div>
+            </aside>
+        </div>
+    </main>
 </body>
 </html>

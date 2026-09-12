@@ -975,3 +975,75 @@ nav a.ativo {
         width: 65%;
     }
 }
+.formAuth {
+    max-width: 420px;
+    margin: 40px auto;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.formAuth h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.formAuth form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.formAuth label {
+    font-weight: bold;
+    margin-top: 10px;
+}
+.formAuth input {
+    padding: 8px;
+    border: 1px solid #172929;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1rem;
+}
+.formAuth button {
+    margin-top: 18px;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    background-color: #172929;
+    color: #fff;
+    font-weight: bold;
+}
+.formAuth p {
+    text-align: center;
+    margin-top: 14px;
+}
+.avisoAuth {
+    background-color: #fdecea;
+    border: 1px solid #f5c2c0;
+    color: #7a1e1e;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+.avisoLogin {
+    font-size: 0.9rem;
+    padding: 6px 0;
+}
+.formComentario {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+.formComentario input {
+    flex: 1;
+    padding: 6px;
+    border: 1px solid #172929;
+    border-radius: 4px;
+}
+.listaComentarios {
+    margin-top: 8px;
+    font-size: 0.9rem;
+}
+.listaComentarios p {
+    margin: 4px 0;
+}

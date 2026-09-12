@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <title>Diário de Bordo</title>
@@ -13,11 +13,11 @@
     <header>
         <h2>NADIA KEANE</h2>
         <nav>
-            <a href="paginaPrincipal.html" class="ativo">INÍCIO</a>
-            <a href="autora.html">CONHEÇA A AUTORA</a>
-            <a href="personagens.html">PERSONAGENS</a>
-            <a href="historia.html">HISTÓRIA</a>
-            <a href="fas.html">ÁREA DOS FÃS</a>
+            <a href="{{ url_for('pagina_principal') }}" class="ativo">INÍCIO</a>
+            <a href="{{ url_for('autora') }}">CONHEÇA A AUTORA</a>
+            <a href="{{ url_for('personagens') }}">PERSONAGENS</a>
+            <a href="{{ url_for('historia') }}">HISTÓRIA</a>
+            <a href="{{ url_for('fas') }}">ÁREA DOS FÃS</a>
         </nav>
     </header>
     <h1>
@@ -46,7 +46,7 @@
                 rel="noopener noreferrer"
             >
                 <img
-                    src="img/NK1.jpg"
+                    src="{{ url_for('static', filename='img/NK1.jpg') }}\"
                     alt="Nadia Keane 1: O Tesouro Roubado"
                 >
             </a>
@@ -56,7 +56,7 @@
                 rel="noopener noreferrer"
             >
                 <img
-                    src="img/NK2.jpg"
+                    src="{{ url_for('static', filename='img/NK2.jpg') }}\"
                     alt="Nadia Keane 2: Adentrando o Mar Oculto"
                 >
             </a>
@@ -66,7 +66,7 @@
                 rel="noopener noreferrer"
             >
                 <img
-                    src="img/NK3.jpg"
+                    src="{{ url_for('static', filename='img/NK3.jpg') }}\"
                     alt="Nadia Keane 3: A Corrida das Ilhas Gêmeas"
                 >
             </a>
@@ -76,7 +76,7 @@
                 rel="noopener noreferrer"
             >
                 <img
-                    src="img/NK4.jpg"
+                    src="{{ url_for('static', filename='img/NK4.jpg') }}\"
                     alt="Nadia Keane 4: A Caverna de Mil Sóis"
                 >
             </a>
@@ -86,7 +86,7 @@
                 rel="noopener noreferrer"
             >
                 <img
-                    src="img/NK5.jpg"
+                    src="{{ url_for('static', filename='img/NK5.jpg') }}\"
                     alt="Nadia Keane 5: A Maldição de Olho-Rubro"
                 >
             </a>

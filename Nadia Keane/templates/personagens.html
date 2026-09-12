@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <title>Diário de Bordo: Os Personagens</title>
@@ -12,11 +12,11 @@
     <header>
         <h2>NADIA KEANE</h2>
         <nav>
-            <a href="paginaPrincipal.html">INÍCIO</a>
-            <a href="autora.html">CONHEÇA A AUTORA</a>
-            <a href="personagens.html" class="ativo">PERSONAGENS</a>
-            <a href="historia.html">HISTÓRIA</a>
-            <a href="fas.html">ÁREA DOS FÃS</a>
+            <a href="{{ url_for('pagina_principal') }}">INÍCIO</a>
+            <a href="{{ url_for('autora') }}">CONHEÇA A AUTORA</a>
+            <a href="{{ url_for('personagens') }}" class="ativo">PERSONAGENS</a>
+            <a href="{{ url_for('historia') }}">HISTÓRIA</a>
+            <a href="{{ url_for('fas') }}">ÁREA DOS FÃS</a>
         </nav>
     </header>
     <main class="areaPersonagens">
@@ -32,7 +32,7 @@
                 <!-- Personagem COM foto -->
                 <article class="cartaoPersonagem">
                     <div class="containerFoto">
-                        <img src="img/personagem1.jpg" alt="Nome do Personagem" class="fotoPersonagem">
+                        <img src="{{ url_for('static', filename='img/personagem1.jpg') }}\" alt="Nome do Personagem" class="fotoPersonagem">
                         <span class="tagFuncao">Capitão</span>
                     </div>
                     <div class="infoPersonagem">
