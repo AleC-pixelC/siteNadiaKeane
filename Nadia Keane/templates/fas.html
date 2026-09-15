@@ -62,7 +62,7 @@
                     <h3>Compartilhe com a comunidade</h3>
                     {% if usuario_logado %}
                         <form action="{{ url_for('cadastrar_post') }}" method="POST" enctype="multipart/form-data">
-                            <textarea name="conteudo" maxlength="500" placeholder="Escreva algo, compartilhe uma teoria, fanart ou apenas comente..." required></textarea>
+                            <textarea name="conteudo" placeholder="Escreva algo, compartilhe uma teoria, fanart ou apenas comente..." required></textarea>
 
                             <div class="rodapePublicacao">
                                 <label for="upload-imagem" class="anexarMidia">Adicionar imagem</label>
@@ -96,26 +96,28 @@
                             {% endif %}
                             <div class="reacoesPublicacao">
                                 {% if usuario_logado %}
-                                    <form action="{{ url_for('curtir_post', id_post=post.idPost) }}" method="POST" style="display:inline;">
+                                    <form action="{{ url_for('curtir_post', id_post=post.idPost) }}" method="POST" style="display:inline;" class="formCurtir" data-post-id="{{ post.idPost }}">
                                         <button type="submit" class="botao-Curtir">
-                                            {% if post.idPost in curtidas_usuario %}❤️{% else %}🤍{% endif %} {{ post.totalCurtidas }}
+                                            <span class="iconeCurtir">{% if post.idPost in curtidas_usuario %}❤️{% else %}🤍{% endif %}</span>
+                                            <span class="contadorCurtidas">{{ post.totalCurtidas }}</span>
                                         </button>
                                     </form>
                                 {% else %}
                                     <a href="{{ url_for('login', proxima=url_for('fas')) }}" class="botao-Curtir">🤍 {{ post.totalCurtidas }}</a>
                                 {% endif %}
-                                <span class="botaoComentar">💬 {{ post.totalComentarios }}</span>
+                                <span class="botaoComentar">💬 <span class="contadorComentarios" data-post-id="{{ post.idPost }}">{{ post.totalComentarios }}</span></span>
+
                             </div>
 
-                            <div class="listaComentarios">
+                            <div class="listaComentarios" id="comentarios-{{ post.idPost }}">
                                 {% for comentario in comentarios_por_post.get(post.idPost, []) %}
                                     <p><strong>{{ comentario.nomeCadastroUsuario }}:</strong> {{ comentario.textComentarios }}</p>
                                 {% endfor %}
                             </div>
 
                             {% if usuario_logado %}
-                                <form action="{{ url_for('comentar_post', id_post=post.idPost) }}" method="POST" class="formComentario">
-                                    <input type="text" name="texto_comentario" placeholder="Escreva um comentário..." maxlength="300" required>
+                                <form action="{{ url_for('comentar_post', id_post=post.idPost) }}" method="POST" class="formComentario" data-post-id="{{ post.idPost }}">
+                                    <textarea name="texto_comentario" placeholder="Escreva um comentário..." rows="20" required></textarea>
                                     <button type="submit" class="publicarPost">Comentar</button>
                                 </form>
                             {% else %}

@@ -118,9 +118,6 @@ nav a.ativo {
     align-items: start;
 }
 
-/* ==========================================================================
-   COLUNA ESQUERDA - PERFIL E MENU DO LEITOR
-   ========================================================================== */
 .perfilLeitor {
     display: flex;
     flex-direction: column;
@@ -186,16 +183,12 @@ nav a.ativo {
     color: #2b1f1d;
 }
 
-/* ==========================================================================
-   COLUNA CENTRAL - MURAL DE PUBLICAÇÕES
-   ========================================================================== */
 .muralPublicacoes {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-/* Caixa de Nova Publicação */
 .novaPublicacao {
     background: #fdfbf7;
     border: 1px solid #d4c5a9;
@@ -221,6 +214,23 @@ nav a.ativo {
     color: #3b2f2f;
     resize: vertical;
     outline: none;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.formComentario textarea {
+    flex: 1;
+    background: #f7f3e9;
+    border: 1px solid #c8b99c;
+    border-radius: 8px;
+    padding: 30px 100px;
+    font-size: 0.9rem;
+    color: #3b2f2f;
+    resize: vertical;
+    outline: none;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    font-family: inherit;
 }
 
 .novaPublicacao textarea:focus {
@@ -266,7 +276,6 @@ nav a.ativo {
     background: #421810;
 }
 
-/* Divisor do Mural */
 .divisorFas {
     text-align: center;
     border-bottom: 1px solid #c8b99c;
@@ -282,7 +291,6 @@ nav a.ativo {
     display: inline-block;
 }
 
-/* Cartão da Publicação */
 .publicacoesFas {
     display: flex;
     flex-direction: column;
@@ -358,9 +366,14 @@ nav a.ativo {
     background: #ebdcc2;
 }
 
-/* ==========================================================================
-   COLUNA DIREITA - DESTAQUES DA COMUNIDADE
-   ========================================================================== */
+.texto-publicacao-fa,
+.listaComentarios p {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    text-align: justify;
+}
+
 .coluna-destaques-comunidade {
     display: flex;
     flex-direction: column;
