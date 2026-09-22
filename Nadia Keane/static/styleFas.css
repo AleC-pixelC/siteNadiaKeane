@@ -218,19 +218,35 @@ nav a.ativo {
     word-break: break-word;
 }
 
+.formComentario {
+    width: 100% !important;
+    display: block !important;
+    margin-top: 15px;
+}
+
 .formComentario textarea {
-    flex: 1;
+    width: 100% !important;
+    height: 95px !important;
+    padding: 12px !important;
+    text-align: left !important;
     background: #f7f3e9;
     border: 1px solid #c8b99c;
     border-radius: 8px;
-    padding: 30px 100px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: #3b2f2f;
     resize: vertical;
     outline: none;
-    overflow-wrap: break-word;
-    word-break: break-word;
+    box-sizing: border-box !important;
     font-family: inherit;
+}
+
+.formComentario textarea:focus {
+    border-color: #8c6d46;
+}
+
+.rodapeComentario {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .novaPublicacao textarea:focus {

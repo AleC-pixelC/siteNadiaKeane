@@ -117,7 +117,7 @@
 
                             {% if usuario_logado %}
                                 <form action="{{ url_for('comentar_post', id_post=post.idPost) }}" method="POST" class="formComentario" data-post-id="{{ post.idPost }}">
-                                    <textarea name="texto_comentario" placeholder="Escreva um comentário..." rows="20" required></textarea>
+                                    <textarea name="texto_comentario" placeholder="Escreva um comentário..." rows="3" required></textarea>
                                     <button type="submit" class="publicarPost">Comentar</button>
                                 </form>
                             {% else %}
@@ -136,9 +136,23 @@
                 <div class="destaquefas">
                     <h4>CONCURSO DE FANART</h4>
                     <div class="concursoFanart">
-                        <span>CONCURSO DE FANART<br><em>Novos horizontes</em></span>
+                        <span>CONCURSO DE FANART</span>
                     </div>
                     <a href="#" class="linkDestaque">Ver detalhes</a>
+                </div>
+                <div class="destaquefas">
+                    <h4>TEORIA DE NADIA KEANE 6!</h4>
+                    <div class="concursoFanart">
+                        <span>TEORIAS NK6</span>
+                    </div>
+                    <a href="#" class="linkDestaque">Entrar e teorizar</a>
+                </div>
+                <div class="destaquefas">
+                    <h4>Podcast *rascunho*!</h4>
+                    <div class="concursoFanart">
+                        <span>Podcast</span>
+                    </div>
+                    <a href="#" class="linkDestaque">Entrar</a>
                 </div>
             </aside>
         </div>
