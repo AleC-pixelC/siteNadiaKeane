@@ -8,13 +8,21 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 app.secret_key = "chave_secreta_nadia_keane"
 
-UPLOAD_FOLDER = os.path.join('static', 'uploads')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, 'bancoNK.db')
+
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 def conectar_bd():
-    conexao = sqlite3.connect("bancoNK.db")
+    if not os.path.exists(DB_PATH):
+        raise FileNotFoundError(
+            f"A base de dados não foi encontrada em '{DB_PATH}'."
+        )
+    
+    conexao = sqlite3.connect(f"file:{DB_PATH}?mode=rw", uri=True)
     conexao.row_factory = sqlite3.Row
     return conexao
 
