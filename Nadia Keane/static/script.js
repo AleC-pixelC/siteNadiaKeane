@@ -201,3 +201,39 @@ function inicializarEventosPublicacoes(raiz) {
     raiz.querySelectorAll(".formExcluirPost").forEach(anexarEventoExcluirPost);
     raiz.querySelectorAll(".formExcluirComentario").forEach(anexarEventoExcluirComentario);
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const formFotoPerfil = document.getElementById("formFotoPerfil");
+    if (formFotoPerfil) {
+        const inputFoto = document.getElementById("upload-foto-perfil");
+        inputFoto.addEventListener("change", function () {
+            if (!inputFoto.files.length) return;
+
+            const dadosFormulario = new FormData(formFotoPerfil);
+            fetch(formFotoPerfil.action, {
+                method: "POST",
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+                body: dadosFormulario
+            })
+                .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+                .then(function (dados) {
+                    if (dados.foto) {
+                        let imagemAtual = document.getElementById("fotoPerfilAtual");
+                        if (!imagemAtual) {
+                            imagemAtual = document.createElement("img");
+                            imagemAtual.id = "fotoPerfilAtual";
+                            imagemAtual.className = "foto-perfil-leitor";
+                            imagemAtual.alt = "Sua foto de perfil";
+                            const avatarAntigo = document.querySelector(".cartaoLeitor .avatarPadrao");
+                            if (avatarAntigo) avatarAntigo.replaceWith(imagemAtual);
+                        }
+                        imagemAtual.src = dados.foto;
+                        atualizarMural(); // pra atualizar o avatar nos posts também
+                    }
+                })
+                .catch(function () {
+                    alert("Não foi possível trocar a foto agora. Tente novamente.");
+                });
+        });
+    }
+});

@@ -42,10 +42,5 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS curtidas (
                 FOREIGN KEY (idUsuario) REFERENCES usuarios(idUsuario)
                 )""")
 
-senha_hash = generate_password_hash('senha123')
-cursor.execute("""INSERT INTO usuarios (nomeUsuario, nomeCadastroUsuario, emailUsuario, senhaUsuario)
-                VALUES ('Axx', 'Axx_Nk', 'axxcnk@email.com', ?)
-                """, (senha_hash,))
-
 conexao.commit()
 conexao.close()

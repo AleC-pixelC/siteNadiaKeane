@@ -470,3 +470,30 @@ nav a.ativo {
     border-radius: 6px;
     border: 1px solid #d4c5a9;
 }
+
+.avatarPadrao {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #5c2419;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.cartaoLeitor .avatarPadrao {
+    width: 85px;
+    height: 85px;
+    font-size: 2rem;
+    margin: 0 auto 10px;
+}
+
+.avatarPadraoPequeno {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+}

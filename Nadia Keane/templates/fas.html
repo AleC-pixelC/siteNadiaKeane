@@ -38,8 +38,16 @@
             <aside class="perfilLeitor">
                 {% if usuario_logado %}
                     <div class="cartaoLeitor">
+                        {% if foto_usuario_logado %}
+                            <img src="{{ url_for('static', filename=foto_usuario_logado) }}" alt="Sua foto de perfil" class="foto-perfil-leitor" id="fotoPerfilAtual">
+                        {% else %}
+                            <div class="avatarPadrao">{{ usuario_logado[0] | upper }}</div>
+                        {% endif %}
                         <h3>{{ usuario_logado }}</h3>
-                        <span class="usuario">Bem-vindo(a) de volta!</span>
+                        <form action="{{ url_for('atualizar_foto_perfil') }}" method="POST" enctype="multipart/form-data" id="formFotoPerfil">
+                            <label for="upload-foto-perfil" class="anexarMidia">Trocar foto</label>
+                            <input type="file" id="upload-foto-perfil" name="foto" accept="image/*" hidden>
+                        </form>
                     </div>
                     <nav class="menuLeitor">
                         <a href="{{ url_for('fas') }}" class="itemLateral opcao-ativa">Mural</a>
@@ -85,6 +93,11 @@
                     {% for post in posts %}
                         <article class="cartaoPublicacao" id="post-{{ post.idPost }}">
                             <div class="cabecalhoPublicacao">
+                                {% if post.fotoPerfilUsuario %}
+                                    <img src="{{ url_for('static', filename=post.fotoPerfilUsuario) }}" alt="Avatar" class="avatarAutor">
+                                {% else %}
+                                    <div class="avatarPadrao avatarPadraoPequeno">{{ post.nomeCadastroUsuario[0] | upper }}</div>
+                                {% endif %}
                                 <div>
                                     <strong>{{ post.nomeCadastroUsuario }}</strong>
                                     <span class="tempoPublicacao">{{ post.dataPost }}</span>

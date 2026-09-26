@@ -54,6 +54,23 @@ def salvar_imagem_enviada(arquivo):
 def injetar_usuario():
     return dict(usuario_logado=session.get('usuario_nome'), id_usuario_logado=session.get('usuario_id'))
 
+@app.route('/atualizar_foto_perfil', methods=['POST'])
+@login_necessario
+def atualizar_foto_perfil():
+    caminho_foto = salvar_imagem_enviada(request.files.get('foto'))
+
+    if caminho_foto:
+        conexao = conectar_bd()
+        conexao.execute(
+            'UPDATE usuarios SET fotoPerfilUsuario = ? WHERE idUsuario = ?',
+            (caminho_foto, session['usuario_id'])
+        )
+        conexao.commit()
+        conexao.close()
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify(sucesso=True, foto=url_for('static', filename=caminho_foto) if caminho_foto else None)
+    return redirect(url_for('fas'))
 
 @app.route('/')
 def inicio():
@@ -159,6 +176,7 @@ def fas():
             post.imagemPost AS imagem,
             post.dataPost,
             usuarios.nomeCadastroUsuario,
+            usuarios.fotoPerfilUsuario,
             (SELECT COUNT(*) FROM curtidas WHERE curtidas.idPost = post.idPost) AS totalCurtidas,
             (SELECT COUNT(*) FROM comentarios WHERE comentarios.idPost = post.idPost) AS totalComentarios
         FROM post
@@ -189,12 +207,21 @@ def fas():
         ''', (post['idPost'],)).fetchall()
         comentarios_por_post[post['idPost']] = comentarios
 
+    foto_usuario_logado = None
+    if 'usuario_id' in session:
+        linha_usuario = conexao.execute(
+            'SELECT fotoPerfilUsuario FROM usuarios WHERE idUsuario = ?', (session['usuario_id'],)
+        ).fetchone()
+        if linha_usuario:
+            foto_usuario_logado = linha_usuario['fotoPerfilUsuario']
+
     conexao.close()
     return render_template(
         'fas.html',
         posts=posts,
         curtidas_usuario=curtidas_usuario,
         comentarios_por_post=comentarios_por_post,
+        foto_usuario_logado=foto_usuario_logado,
     )
 
 
