@@ -266,16 +266,27 @@ def curtir_post(id_post):
 @login_necessario
 def comentar_post(id_post):
     texto = request.form.get('texto_comentario', '').strip()
+    novo_id = None
+    total = 0
     if texto:
         conexao = conectar_bd()
-        conexao.execute('''
+        cursor = conexao.execute('''
             INSERT INTO comentarios (idPost, idUsuario, textComentarios)
             VALUES (?, ?, ?)
         ''', (id_post, session['usuario_id'], texto))
-    conexao.commit()
-    conexao.close()
+        conexao.commit()
+        novo_id = cursor.lastrowid
+        total = conexao.execute(
+            'SELECT COUNT(*) AS total FROM comentarios WHERE idPost = ?', (id_post,)
+        ).fetchone()['total']
+        conexao.close()
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        return jsonify(sucesso=True)    
+        return jsonify(
+            idComentarios=novo_id,
+            nomeCadastroUsuario=session.get('usuario_nome'),
+            textComentarios=texto,
+            total=total,
+        )
     return redirect(url_for('fas'))
 
 @app.route('/excluir_post/<int:id_post>', methods=['POST'])

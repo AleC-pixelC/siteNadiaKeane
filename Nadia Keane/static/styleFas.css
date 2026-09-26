@@ -276,7 +276,8 @@ nav a.ativo {
     background: #efe3ce;
 }
 
-.publicarPost {
+.publicarPost,
+.botaoExcluirComentario {
     background: #5c2419;
     color: #ffffff;
     border: none;

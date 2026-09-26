@@ -53,9 +53,6 @@ function anexarEventoCurtir(form) {
                 form.querySelector(".iconeCurtir").textContent = dados.curtido ? "❤️" : "🤍";
                 form.querySelector(".contadorCurtidas").textContent = dados.total;
             })
-            .catch(function () {
-                alert("Não foi possível curtir agora. Tente novamente.");
-            });
     });
 }
  
@@ -114,18 +111,12 @@ function anexarEventoComentario(form) {
  
                 campoTexto.value = "";
             })
-            .catch(function () {
-                alert("Não foi possível comentar agora. Tente novamente.");
-            });
     });
 }
  
-// ---------- Excluir post ----------
 function anexarEventoExcluirPost(form) {
     form.addEventListener("submit", function (evento) {
         evento.preventDefault();
-        const confirmado = confirm("Tem certeza que quer excluir essa publicação?");
-        if (!confirmado) return;
  
         const postId = form.dataset.postId;
         fetch(form.action, {
@@ -136,19 +127,18 @@ function anexarEventoExcluirPost(form) {
             .then(function () {
                 const cartao = document.getElementById("post-" + postId);
                 if (cartao) cartao.remove();
+
+                const lista = document.getElementById("listaPublicacoes");
+                if (lista && !lista.querySelector(".cartaoPublicacao")) {
+                    lista.innerHTML = "<p>Ainda não há publicações. Seja o primeiro a compartilhar algo!</p>";
+                }
             })
-            .catch(function () {
-                alert("Não foi possível excluir agora. Tente novamente.");
-            });
     });
 }
  
 function anexarEventoExcluirComentario(form) {
     form.addEventListener("submit", function (evento) {
         evento.preventDefault();
-        const confirmado = confirm("Tem certeza que quer excluir esse comentário?");
-        if (!confirmado) return;
- 
         const commentId = form.dataset.commentId;
         const item = document.getElementById("comentario-" + commentId);
         const listaComentarios = item ? item.closest(".listaComentarios") : null;
@@ -166,9 +156,6 @@ function anexarEventoExcluirComentario(form) {
                     if (contador) contador.textContent = Math.max(0, parseInt(contador.textContent, 10) - 1);
                 }
             })
-            .catch(function () {
-                alert("Não foi possível excluir agora. Tente novamente.");
-            });
     });
 }
  
@@ -190,9 +177,6 @@ function inicializarFormNovoPost() {
                 form.reset();
                 atualizarMural();
             })
-            .catch(function () {
-                alert("Não foi possível publicar agora. Tente novamente.");
-            });
     });
 }
  
