@@ -61,7 +61,7 @@
                 <div class="novaPublicacao">
                     <h3>Compartilhe com a comunidade</h3>
                     {% if usuario_logado %}
-                        <form action="{{ url_for('cadastrar_post') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ url_for('cadastrar_post') }}" method="POST" enctype="multipart/form-data" id="formNovoPost">
                             <textarea name="conteudo" placeholder="Escreva algo, compartilhe uma teoria, fanart ou apenas comente..." required></textarea>
 
                             <div class="rodapePublicacao">
@@ -81,9 +81,9 @@
                 <div class="divisorFas">
                     <h3>Mural dos Fãs</h3>
                 </div>
-                <div class="publicacoesFas">
+                <div class="publicacoesFas" id="listaPublicacoes">
                     {% for post in posts %}
-                        <article class="cartaoPublicacao">
+                        <article class="cartaoPublicacao" id="post-{{ post.idPost }}">
                             <div class="cabecalhoPublicacao">
                                 <div>
                                     <strong>{{ post.nomeCadastroUsuario }}</strong>
@@ -93,6 +93,11 @@
                             <p class="texto-publicacao-fa">{{ post.conteudo }}</p>
                             {% if post.imagem %}
                                 <img src="{{ url_for('static', filename=post.imagem) }}" alt="Imagem da publicação" class="midiaPublicacao">
+                            {% endif %}
+                            {% if usuario_logado and post.idUsuario == id_usuario_logado %}
+                                <form action="{{ url_for('excluir_post', id_post=post.idPost) }}" method="POST" class="formExcluirPost" data-post-id="{{ post.idPost }}">
+                                    <button type="submit" class="publicarPost">Excluir</button>
+                                </form>
                             {% endif %}
                             <div class="reacoesPublicacao">
                                 {% if usuario_logado %}
@@ -106,12 +111,18 @@
                                     <a href="{{ url_for('login', proxima=url_for('fas')) }}" class="botao-Curtir">🤍 {{ post.totalCurtidas }}</a>
                                 {% endif %}
                                 <span class="botaoComentar">💬 <span class="contadorComentarios" data-post-id="{{ post.idPost }}">{{ post.totalComentarios }}</span></span>
-
                             </div>
 
                             <div class="listaComentarios" id="comentarios-{{ post.idPost }}">
                                 {% for comentario in comentarios_por_post.get(post.idPost, []) %}
-                                    <p><strong>{{ comentario.nomeCadastroUsuario }}:</strong> {{ comentario.textComentarios }}</p>
+                                    <div class="itemComentario" id="comentario-{{ comentario.idComentarios }}">
+                                        <p><strong>{{ comentario.nomeCadastroUsuario }}:</strong> {{ comentario.textComentarios }}</p>
+                                        {% if usuario_logado and comentario.idUsuario == id_usuario_logado %}
+                                            <form action="{{ url_for('excluir_comentario', id_comentarios=comentario.idComentarios) }}" method="POST" class="formExcluirComentario" data-comment-id="{{ comentario.idComentarios }}">
+                                                <button type="submit" class="botaoExcluirComentario">Excluir</button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
                                 {% endfor %}
                             </div>
 
@@ -138,21 +149,21 @@
                     <div class="concursoFanart">
                         <span>CONCURSO DE FANART</span>
                     </div>
-                    <a href="#" class="linkDestaque">Ver detalhes</a>
+                    <a href="{{ url_for('fasConcurso') }}" class="linkDestaque">Ver detalhes</a>
                 </div>
                 <div class="destaquefas">
                     <h4>TEORIA DE NADIA KEANE 6!</h4>
                     <div class="concursoFanart">
                         <span>TEORIAS NK6</span>
                     </div>
-                    <a href="#" class="linkDestaque">Entrar e teorizar</a>
+                    <a href="{{ url_for('fasTeorias') }}" class="linkDestaque">Entrar e teorizar</a>
                 </div>
                 <div class="destaquefas">
                     <h4>Podcast *rascunho*!</h4>
                     <div class="concursoFanart">
                         <span>Podcast</span>
                     </div>
-                    <a href="#" class="linkDestaque">Entrar</a>
+                    <a href="{{ url_for('fasPodCast') }}" class="linkDestaque">Entrar</a>
                 </div>
             </aside>
         </div>

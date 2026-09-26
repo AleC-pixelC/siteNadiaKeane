@@ -1,7 +1,8 @@
 import os
 import sqlite3
+import uuid
 from functools import wraps
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -36,10 +37,22 @@ def login_necessario(f):
         return f(*args, **kwargs)
     return decorada
 
+def salvar_imagem_enviada(arquivo):
+    if not arquivo or arquivo.filename == '':
+        return None
+
+    extensao = os.path.splitext(secure_filename(arquivo.filename))[1].lower()
+    if not extensao:
+        extensao = '.jpg'
+
+    nome_unico = f"{uuid.uuid4().hex}{extensao}"
+    caminho_completo = os.path.join(app.config['UPLOAD_FOLDER'], nome_unico)
+    arquivo.save(caminho_completo)
+    return f"uploads/{nome_unico}" 
 
 @app.context_processor
 def injetar_usuario():
-    return dict(usuario_logado=session.get('usuario_nome'))
+    return dict(usuario_logado=session.get('usuario_nome'), id_usuario_logado=session.get('usuario_id'))
 
 
 @app.route('/')
@@ -141,6 +154,7 @@ def fas():
     posts = conexao.execute('''
         SELECT
             post.idPost,
+            post.idUsuario,
             post.textoPost AS conteudo,
             post.imagemPost AS imagem,
             post.dataPost,
@@ -162,7 +176,12 @@ def fas():
     comentarios_por_post = {}
     for post in posts:
         comentarios = conexao.execute('''
-            SELECT comentarios.textComentarios, comentarios.dataComentarios, usuarios.nomeCadastroUsuario
+            SELECT 
+                    comentarios.idComentarios,
+                    comentarios.idUsuario,
+                    comentarios.textComentarios, 
+                    comentarios.dataComentarios, 
+                    usuarios.nomeCadastroUsuario
             FROM comentarios
             JOIN usuarios ON comentarios.idUsuario = usuarios.idUsuario
             WHERE comentarios.idPost = ?
@@ -177,6 +196,20 @@ def fas():
         curtidas_usuario=curtidas_usuario,
         comentarios_por_post=comentarios_por_post,
     )
+
+
+
+@app.route('/fasConcurso')
+def fasConcurso():
+    return render_template('fasConcurso.html')
+
+@app.route('/fasTeorias')
+def fasTeorias():
+    return render_template('fasTeorias.html')
+
+@app.route('/fasPodCast')
+def fasPodCast():
+    return render_template('fasPodCast.html')
 
 
 @app.route('/cadastrar_post', methods=['POST'])
@@ -199,7 +232,8 @@ def cadastrar_post():
     ''', (session['usuario_id'], conteudo, caminho_imagem))
     conexao.commit()
     conexao.close()
-
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify(sucesso=True)
     return redirect(url_for('fas'))
 
 
@@ -223,6 +257,8 @@ def curtir_post(id_post):
 
     conexao.commit()
     conexao.close()
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify(sucesso=True)
     return redirect(url_for('fas'))
 
 
@@ -236,8 +272,50 @@ def comentar_post(id_post):
             INSERT INTO comentarios (idPost, idUsuario, textComentarios)
             VALUES (?, ?, ?)
         ''', (id_post, session['usuario_id'], texto))
+    conexao.commit()
+    conexao.close()
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify(sucesso=True)    
+    return redirect(url_for('fas'))
+
+@app.route('/excluir_post/<int:id_post>', methods=['POST'])
+@login_necessario
+def excluir_post(id_post):
+    conexao = conectar_bd()
+    post = conexao.execute(
+        'SELECT idUsuario, imagemPost FROM post WHERE idPost = ?', (id_post,)
+    ).fetchone()
+
+    if post and post['idUsuario'] == session['usuario_id']:
+        conexao.execute('DELETE FROM post WHERE idPost = ?', (id_post,))
         conexao.commit()
-        conexao.close()
+
+        if post['imagemPost']:
+            caminho_imagem = os.path.join(BASE_DIR, 'static', post['imagemPost'])
+            if os.path.exists(caminho_imagem):
+                try:
+                    os.remove(caminho_imagem)
+                except OSError:
+                    pass
+    conexao.close()
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify(sucesso=True)
+    return redirect(url_for('fas'))
+
+@app.route('/excluir_comentario/<int:id_comentarios>', methods=['POST'])
+@login_necessario
+def excluir_comentario(id_comentarios):
+    conexao = conectar_bd()
+    comentario = conexao.execute(
+        'SELECT idUsuario FROM comentarios WHERE idComentarios = ?', (id_comentarios,)
+    ).fetchone()
+
+    if comentario and comentario['idUsuario'] == session['usuario_id']:
+        conexao.execute('DELETE FROM comentarios WHERE idComentarios = ?', (id_comentarios,))
+        conexao.commit()
+    conexao.close()
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify(sucesso=True)
     return redirect(url_for('fas'))
 
 
