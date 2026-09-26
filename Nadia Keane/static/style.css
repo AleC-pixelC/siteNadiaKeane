@@ -293,6 +293,15 @@ nav a.ativo {
     text-align: justify;
 }
 
+.avisoOficial {
+    width: 100%;
+    text-align: center;
+    font-size: 25px;
+    color: black;
+    opacity: 0.8;
+    margin: 0 0 16px;
+}
+
 .imagemLivros {
     width: 50%;
     display: grid;
