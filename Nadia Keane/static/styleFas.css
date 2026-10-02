@@ -497,3 +497,36 @@ nav a.ativo {
     height: 45px;
     font-size: 1.1rem;
 }
+
+.areaFasAbas {     
+    max-width: none;     
+    width: 100%;     
+    margin: 30px 0;     
+    padding: 90px 20px 20px; 
+} 
+
+.muralFasAbas {     
+    display: grid; 
+    grid-column: 2 / 4;    
+    grid-template-columns: 240px 1fr 280px;     
+    gap: 25px;     
+    align-items: start; 
+} 
+
+.perfilLeitorAbas {     
+    position: static;     
+    top: 100px;     
+    left: 10px;     
+    width: 240px; 
+}
+
+.episodiosPodCast {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    width: 100%;
+}
+
+.textoPodcast {
+    grid-column: 1 / -1;
+}

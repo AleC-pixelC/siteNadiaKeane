@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleFas.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <title>Área dos Fãs de NK: Jackast</title>
+</head>
+<body class="paginasCentrais">
+    <header>
+        <h2>NADIA KEANE</h2>
+        <nav>
+            <a href="{{ url_for('pagina_principal') }}">INÍCIO: VOLTAR</a>
+            <a href="{{ url_for('fas') }}">ÁREA DOS FÃS: VOLTAR</a>
+        </nav>
+    </header>
+    <main class="areaFasAbas">
+        <section class="tituloFas">
+            <h2>Podcast Jackast</h2>
+        </section>
+
+        {% with mensagens = get_flashed_messages() %}
+            {% if mensagens %}
+                <div class="avisoAuth">
+                    {% for mensagem in mensagens %}
+                        <p>{{ mensagem }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="muralFasAbas">
+            <aside class="perfilLeitorAbas">
+                {% if usuario_logado %}
+                    <div class="cartaoLeitor">
+                        {% if foto_usuario_logado %}
+                            <img src="{{ url_for('static', filename=foto_usuario_logado) }}" alt="Sua foto de perfil" class="foto-perfil-leitor" id="fotoPerfilAtual">
+                        {% else %}
+                            <div class="avatarPadrao">{{ usuario_logado[0] | upper }}</div>
+                        {% endif %}
+                        <h3>{{ usuario_logado }}</h3>
+                        <form action="{{ url_for('atualizar_foto_perfil') }}" method="POST" enctype="multipart/form-data" id="formFotoPerfil">
+                            <label for="upload-foto-perfil" class="anexarMidia">Trocar foto</label>
+                            <input type="file" id="upload-foto-perfil" name="foto" accept="image/*" hidden>
+                        </form>
+                        <br>
+                        <nav class="menuLeitor">
+                            <a href="{{ url_for('fas') }}" class="itemLateral opcao-ativa">Mural</a>
+                            <a href="{{ url_for('logout') }}" class="itemLateral">Sair</a>
+                        </nav>
+                    </div>
+                {% else %}
+                    <div class="cartaoLeitor">
+                        <h3>Visitante</h3>
+                        <span class="usuario">Você não está logado</span>
+                    </div>
+                    <nav class="menuLeitor">
+                        <a href="{{ url_for('login') }}" class="itemLateral opcao-ativa">Entrar</a>
+                        <a href="{{ url_for('cadastro') }}" class="itemLateral">Cadastrar</a>
+                    </nav>
+                {% endif %}
+            </aside>
+            <div class="episodiosPodCast">
+                <div class="textoPodcast">
+                    <p>*Texto base sobre o podcast, integrantes responsaveis por toda a criação e tods os créditos*</p>
+                </div>
+                <div class="episodio1">
+                    <iframe
+                        width="560"
+                        height="315"
+                        src="https://www.youtube.com/embed/Mzju2LoNo-Y"
+                        title="YouTube video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="episodio2">
+                    <iframe 
+                        width="560" 
+                        height="315" 
+                        src="https://www.youtube.com/embed/g5zxUu03gts?si=AjhTqw7PjIQIp9Hl" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="episodio3">
+                    <iframe
+                        width="560"
+                        height="315"
+                        src="https://www.youtube.com/embed/Mj0UJBZRJv8?si=w1Y4107aOqOLbpQ2"
+                        title="YouTube video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="episodio4">
+                    <iframe
+                        width="560"
+                        height="315"
+                        src="https://www.youtube.com/embed/oEf5EsOnMY8?si=my36x1p0meThba3n"
+                        title="YouTube video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="episodio5">
+                    <iframe
+                        width="560"
+                        height="315"
+                        src="https://www.youtube.com/embed/PqtiPbYY89E?si=O-e6-UqmpCo7u1LJ"
+                        title="YouTube video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
