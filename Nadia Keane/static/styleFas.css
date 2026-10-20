@@ -498,33 +498,62 @@ nav a.ativo {
     font-size: 1.1rem;
 }
 
-.areaFasAbas {     
-    max-width: none;     
-    width: 100%;     
-    margin: 30px 0;     
-    padding: 90px 20px 20px; 
-} 
+.areaFasAbas {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 90px clamp(12px, 2.5vw, 30px) 30px;
+}
 
-.muralFasAbas {     
-    display: grid; 
-    grid-column: 2 / 4;    
-    grid-template-columns: 240px 1fr 280px;     
-    gap: 25px;     
-    align-items: start; 
-} 
+.muralFasAbas {
+    display: grid;
+    grid-template-columns: minmax(170px, 230px) minmax(0, 1fr);
+    gap: clamp(12px, 2vw, 25px);
+    align-items: start;
+    width: 100%;
+}
 
-.perfilLeitorAbas {     
-    position: static;     
-    top: 100px;     
-    left: 10px;     
-    width: 240px; 
+.perfilLeitorAbas {
+    position: static;
+    width: 100%;
+    min-width: 0;
 }
 
 .episodiosPodCast {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(12px, 2vw, 25px);
     width: 100%;
+    min-width: 0;
+}
+
+.textoPodcast {
+    grid-column: 1 / -1;
+    min-width: 0;
+}
+
+.textoPodcast p {
+    overflow-wrap: anywhere;
+}
+
+.episodio1,
+.episodio2,
+.episodio3,
+.episodio4,
+.episodio5,
+.episodio6 {
+    width: 100%;
+    min-width: 0;
+}
+
+.episodiosPodCast iframe {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    border: 0;
+    border-radius: 8px;
 }
 
 .textoPodcast {

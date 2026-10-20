@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png"
+          href="{{ url_for('static', filename='img/logo.png') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='styleFas.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <title>Nadia Keane: Área de Teorias</title>
+</head>
+<body class="paginasCentrais">
+    <header>
+        <h2>NADIA KEANE</h2>
+        <nav>
+            <a href="{{ url_for('pagina_principal') }}">INÍCIO</a>
+            <a href="{{ url_for('autora') }}">CONHEÇA A AUTORA</a>
+            <a href="{{ url_for('personagens') }}">PERSONAGENS</a>
+            <a href="{{ url_for('historia') }}">HISTÓRIA</a>
+            <a href="{{ url_for('fas') }}">ÁREA DOS FÃS</a>
+        </nav>
+    </header>
+    <main class="areaFas areaTeorias">
+        <section class="tituloFas">
+            <h2>ÁREA DE TEORIAS</h2>
+        </section>
+        {% with mensagens = get_flashed_messages() %}
+            {% if mensagens %}
+                <div class="avisoAuth">
+                    {% for mensagem in mensagens %}
+                        <p>{{ mensagem }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="muralFas muralTeorias">
+            <aside class="perfilLeitor perfilLeitorTeorias">
+                {% if usuario_logado %}
+                    <div class="cartaoLeitor">
+                        {% if foto_usuario_logado %}
+                            <img
+                                src="{{ url_for('static', filename=foto_usuario_logado) }}"
+                                alt="Sua foto de perfil"
+                                class="foto-perfil-leitor"
+                                id="fotoPerfilAtual">
+                        {% else %}
+                            <div class="avatarPadrao">
+                                {{ usuario_logado[0] | upper }}
+                            </div>
+                        {% endif %}
+                        <h3>{{ usuario_logado }}</h3>
+                        <form
+                            action="{{ url_for('atualizar_foto_perfil') }}"
+                            method="POST"
+                            enctype="multipart/form-data"
+                            id="formFotoPerfil">
+                            <label for="upload-foto-perfil"
+                                   class="anexarMidia">
+                                Trocar foto
+                            </label>
+                            <input
+                                type="file"
+                                id="upload-foto-perfil"
+                                name="foto"
+                                accept="image/*"
+                                hidden>
+                        </form>
+                    </div>
+                    <nav class="menuLeitor">
+                        <a href="{{ url_for('fas') }}"
+                           class="itemLateral">
+                            Mural dos fãs
+                        </a>
+                        <a href="{{ url_for('fasTeorias') }}"
+                           class="itemLateral opcao-ativa">
+                            Teorias
+                        </a>
+                        <a href="{{ url_for('logout') }}"
+                           class="itemLateral">
+                            Sair
+                        </a>
+                    </nav>
+                {% else %}
+
+                    <div class="cartaoLeitor">
+                        <h3>Visitante</h3>
+                        <span class="usuario">
+                            Você não está logado
+                        </span>
+                    </div>
+                    <nav class="menuLeitor">
+                        <a href="{{ url_for('login') }}"
+                           class="itemLateral">
+                            Entrar
+                        </a>
+                        <a href="{{ url_for('cadastro') }}"
+                           class="itemLateral">
+                            Cadastrar
+                        </a>
+                    </nav>
+                {% endif %}
+            </aside>
+            <section class="muralPublicacoes muralPublicacoesTeorias">
+                <div class="novaPublicacao novaTeoria">
+                    <h3>Compartilhe sua teoria</h3>
+                    {% if usuario_logado %}
+                        <form
+                            action="{{ url_for('cadastrar_teoria') }}"
+                            method="POST"
+                            enctype="multipart/form-data"
+                            id="formNovaTeoria">
+                            <textarea
+                                name="conteudo"
+                                placeholder="Apresente sua teoria sobre Nadia Keane..."
+                                required></textarea>
+                            <div class="rodapePublicacao">
+                                <label for="upload-imagem-teoria"
+                                       class="anexarMidia">
+                                    Adicionar imagem
+                                </label>
+                                <input
+                                    type="file"
+                                    id="upload-imagem-teoria"
+                                    name="imagem"
+                                    accept="image/*"
+                                    hidden>
+                                <button type="submit"
+                                        class="publicarPost">
+                                    Publicar teoria
+                                </button>
+                            </div>
+                        </form>
+                    {% else %}
+                        <p class="avisoLogin">
+                            <a href="{{ url_for('login', proxima=url_for('fasTeorias')) }}">
+                                Faça login
+                            </a>
+                            ou
+                            <a href="{{ url_for('cadastro') }}">
+                                cadastre-se
+                            </a>
+                            para publicar sua teoria.
+                        </p>
+                    {% endif %}
+                </div>
+                <div class="divisorFas">
+                    <h3>Mural de teorias</h3>
+                </div>
+                <div class="publicacoesFas" id="listaTeorias">
+                    {% for teoria in teorias %}
+                        <article
+                            class="cartaoPublicacao cartaoTeoria"
+                            id="teoria-{{ teoria.idTeoria }}">
+                            <div class="cabecalhoPublicacao">
+                                {% if teoria.fotoPerfilUsuario %}
+                                    <img
+                                        src="{{ url_for('static', filename=teoria.fotoPerfilUsuario) }}"
+                                        alt="Foto do autor"
+                                        class="avatarAutor">
+                                {% else %}
+                                    <div class="avatarPadrao avatarPadraoPequeno">
+                                        {{ teoria.nomeCadastroUsuario[0] | upper }}
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <strong>
+                                        {{ teoria.nomeCadastroUsuario }}
+                                    </strong>
+                                    <span class="tempoPublicacao">
+                                        {{ teoria.dataTeoria }}
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="texto-publicacao-fa">
+                                {{ teoria.conteudo }}
+                            </p>
+                            {% if teoria.imagem %}
+                                <img
+                                    src="{{ url_for('static', filename=teoria.imagem) }}"
+                                    alt="Imagem da teoria"
+                                    class="midiaPublicacao">
+                            {% endif %}
+                            {% if usuario_logado
+                                  and teoria.idUsuario == id_usuario_logado %}
+                                <form
+                                    action="{{ url_for('excluir_teoria', id_teoria=teoria.idTeoria) }}"
+                                    method="POST"
+                                    class="formExcluirTeoria">
+                                    <button type="submit"
+                                            class="publicarPost">
+                                        Excluir teoria
+                                    </button>
+                                </form>
+                            {% endif %}
+                            <div class="reacoesPublicacao">
+                                {% if usuario_logado %}
+                                    <form
+                                        action="{{ url_for('curtir_teoria', id_teoria=teoria.idTeoria) }}"
+                                        method="POST"
+                                        class="formCurtir">
+                                        <button type="submit"
+                                                class="botao-Curtir">
+                                            <span class="iconeCurtir">
+                                                {% if teoria.idTeoria in curtidas_usuario %}
+                                                    ❤️
+                                                {% else %}
+                                                    🤍
+                                                {% endif %}
+                                            </span>
+                                            <span class="contadorCurtidas">
+                                                {{ teoria.totalCurtidas }}
+                                            </span>
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <a
+                                        href="{{ url_for('login', proxima=url_for('fasTeorias')) }}"
+                                        class="botao-Curtir">
+                                        🤍 {{ teoria.totalCurtidas }}
+                                    </a>
+                                {% endif %}
+                                <span class="botaoComentar">
+                                    💬
+                                    <span class="contadorComentarios">
+                                        {{ teoria.totalComentarios }}
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="listaComentarios"
+                                 id="comentarios-teoria-{{ teoria.idTeoria }}">
+                                {% for comentario in comentarios_por_teoria.get(teoria.idTeoria, []) %}
+                                    <div class="itemComentario">
+                                        <p>
+                                            <strong>
+                                                {{ comentario.nomeCadastroUsuario }}:
+                                            </strong>
+                                            {{ comentario.textComentarios }}
+                                        </p>
+                                        {% if usuario_logado
+                                              and comentario.idUsuario == id_usuario_logado %}
+                                            <form
+                                                action="{{ url_for('excluir_comentario_teoria', id_comentarios=comentario.idComentarios) }}"
+                                                method="POST"
+                                                class="formExcluirComentario">
+                                                <button
+                                                    type="submit"
+                                                    class="botaoExcluirComentario">
+                                                    Excluir
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% if usuario_logado %}
+                                <form
+                                    action="{{ url_for('comentar_teoria', id_teoria=teoria.idTeoria) }}"
+                                    method="POST"
+                                    class="formComentario">
+                                    <textarea
+                                        name="texto_comentario"
+                                        placeholder="Comente sobre essa teoria..."
+                                        rows="3"
+                                        required></textarea>
+                                    <button type="submit"
+                                            class="publicarPost">
+                                        Comentar
+                                    </button>
+                                </form>
+                            {% else %}
+                                <p class="avisoLogin">
+                                    <a href="{{ url_for('login', proxima=url_for('fasTeorias')) }}">
+                                        Faça login
+                                    </a>
+                                    para comentar.
+                                </p>
+                            {% endif %}
+                        </article>
+                    {% else %}
+                        <p>
+                            Ainda não há teorias publicadas.
+                            Seja o primeiro a compartilhar uma!
+                        </p>
+                    {% endfor %}
+                </div>
+            </section>
+            <!-- COLUNA LATERAL -->
+            <aside class="coluna-destaques-comunidade colunaDestaquesTeorias">
+                <div class="destaquefas">
+                    <h4>Área de teorias</h4>
+                    <div class="concursoFanart">
+                        <span>TEORIAS NK6</span>
+                    </div>
+                    <a href="{{ url_for('fas') }}"
+                       class="linkDestaque">
+                        Voltar ao mural dos fãs
+                </a>
+                </div>
+            </aside>
+        </div>
+    </main>
+</body>
+</html>
