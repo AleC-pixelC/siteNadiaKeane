@@ -5,14 +5,14 @@ function paginaPrincipal() {
     mar.classList.add("entrando");
 
     som.volume = 0.5;
-    som.play();
-
+    const tentativa = som.play();
+    if (tentativa && tentativa.catch) {
+        tentativa.catch(function () { /* sem som, segue a transição */ });
+    }
     setTimeout(function () {
-
         const diminuirSom = setInterval(function () {
-
             if (som.volume > 0.05) {
-                som.volume -= 0.05;
+                som.volume = Math.max(0, som.volume - 0.05);
             } else {
                 som.volume = 0;
                 som.pause();
@@ -20,7 +20,6 @@ function paginaPrincipal() {
             }
         }, 100);
     }, 7000);
-
     setTimeout(function () {
         window.location.href = "/inicio";
     }, 8000);
@@ -39,8 +38,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     inicializarEventosPublicacoes(document);
     inicializarFormNovoPost();
+    inicializarFotoPerfil();
+    inicializarTeorias();
 });
- 
+
 function anexarEventoCurtir(form) {
     form.addEventListener("submit", function (evento) {
         evento.preventDefault();
@@ -53,17 +54,20 @@ function anexarEventoCurtir(form) {
                 form.querySelector(".iconeCurtir").textContent = dados.curtido ? "❤️" : "🤍";
                 form.querySelector(".contadorCurtidas").textContent = dados.total;
             })
+            .catch(function () {
+                alert("Não foi possível registrar a curtida. Tente novamente.");
+            });
     });
 }
- 
-// ---------- Comentar ----------
+
 function anexarEventoComentario(form) {
     form.addEventListener("submit", function (evento) {
         evento.preventDefault();
         const postId = form.dataset.postId;
         const campoTexto = form.querySelector('textarea[name="texto_comentario"]');
-        const texto = campoTexto.value;
- 
+        const texto = campoTexto.value.trim();
+        if (!texto) return;
+
         fetch(form.action, {
             method: "POST",
             headers: {
@@ -75,49 +79,49 @@ function anexarEventoComentario(form) {
             .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
             .then(function (dados) {
                 const listaComentarios = document.getElementById("comentarios-" + postId);
- 
+
                 const item = document.createElement("div");
                 item.className = "itemComentario";
                 if (dados.idComentarios) item.id = "comentario-" + dados.idComentarios;
- 
+
                 const paragrafo = document.createElement("p");
                 const nomeForte = document.createElement("strong");
                 nomeForte.textContent = dados.nomeCadastroUsuario + ": ";
                 paragrafo.appendChild(nomeForte);
                 paragrafo.appendChild(document.createTextNode(dados.textComentarios));
                 item.appendChild(paragrafo);
- 
+
                 if (dados.idComentarios) {
                     const formExcluir = document.createElement("form");
                     formExcluir.method = "POST";
                     formExcluir.action = "/excluir_comentario/" + dados.idComentarios;
                     formExcluir.className = "formExcluirComentario";
                     formExcluir.dataset.commentId = dados.idComentarios;
- 
+
                     const botao = document.createElement("button");
                     botao.type = "submit";
                     botao.className = "botaoExcluirComentario";
                     botao.textContent = "Excluir";
                     formExcluir.appendChild(botao);
- 
+
                     anexarEventoExcluirComentario(formExcluir);
                     item.appendChild(formExcluir);
                 }
- 
                 listaComentarios.appendChild(item);
- 
                 const contador = document.querySelector('.contadorComentarios[data-post-id="' + postId + '"]');
                 if (contador) contador.textContent = dados.total;
- 
                 campoTexto.value = "";
             })
+            .catch(function () {
+                alert("Não foi possível publicar o comentário. Tente novamente.");
+            });
     });
 }
- 
+
 function anexarEventoExcluirPost(form) {
     form.addEventListener("submit", function (evento) {
         evento.preventDefault();
- 
+
         const postId = form.dataset.postId;
         fetch(form.action, {
             method: "POST",
@@ -133,9 +137,12 @@ function anexarEventoExcluirPost(form) {
                     lista.innerHTML = "<p>Ainda não há publicações. Seja o primeiro a compartilhar algo!</p>";
                 }
             })
+            .catch(function () {
+                alert("Não foi possível excluir a publicação. Tente novamente.");
+            });
     });
 }
- 
+
 function anexarEventoExcluirComentario(form) {
     form.addEventListener("submit", function (evento) {
         evento.preventDefault();
@@ -143,7 +150,7 @@ function anexarEventoExcluirComentario(form) {
         const item = document.getElementById("comentario-" + commentId);
         const listaComentarios = item ? item.closest(".listaComentarios") : null;
         const postId = listaComentarios ? listaComentarios.id.replace("comentarios-", "") : null;
- 
+
         fetch(form.action, {
             method: "POST",
             headers: { "X-Requested-With": "XMLHttpRequest" }
@@ -156,17 +163,20 @@ function anexarEventoExcluirComentario(form) {
                     if (contador) contador.textContent = Math.max(0, parseInt(contador.textContent, 10) - 1);
                 }
             })
+            .catch(function () {
+                alert("Não foi possível excluir o comentário. Tente novamente.");
+            });
     });
 }
- 
+
 function inicializarFormNovoPost() {
     const form = document.getElementById("formNovoPost");
     if (!form) return;
- 
+
     form.addEventListener("submit", function (evento) {
         evento.preventDefault();
         const dadosFormulario = new FormData(form);
- 
+
         fetch(form.action, {
             method: "POST",
             headers: { "X-Requested-With": "XMLHttpRequest" },
@@ -177,9 +187,12 @@ function inicializarFormNovoPost() {
                 form.reset();
                 atualizarMural();
             })
+            .catch(function () {
+                alert("Não foi possível publicar agora. Tente novamente.");
+            });
     });
 }
- 
+
 function atualizarMural() {
     fetch(window.location.href, { headers: { "X-Requested-With": "XMLHttpRequest" } })
         .then(function (r) { return r.text(); })
@@ -194,46 +207,188 @@ function atualizarMural() {
             }
         });
 }
- 
+
 function inicializarEventosPublicacoes(raiz) {
-    raiz.querySelectorAll(".formCurtir").forEach(anexarEventoCurtir);
-    raiz.querySelectorAll(".formComentario").forEach(anexarEventoComentario);
+    raiz.querySelectorAll(".formCurtir").forEach(function (form) {
+        if (form.closest("#listaPublicacoes")) {
+            anexarEventoCurtir(form);
+        }
+    });
+    raiz.querySelectorAll(".formComentario").forEach(function (form) {
+        if (form.closest("#listaPublicacoes")) {
+            anexarEventoComentario(form);
+        }
+    });
     raiz.querySelectorAll(".formExcluirPost").forEach(anexarEventoExcluirPost);
-    raiz.querySelectorAll(".formExcluirComentario").forEach(anexarEventoExcluirComentario);
+    raiz.querySelectorAll(".formExcluirComentario").forEach(function (form) {
+        if (form.closest("#listaPublicacoes")) {
+            anexarEventoExcluirComentario(form);
+        }
+    });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+function inicializarFotoPerfil() {
     const formFotoPerfil = document.getElementById("formFotoPerfil");
-    if (formFotoPerfil) {
-        const inputFoto = document.getElementById("upload-foto-perfil");
-        inputFoto.addEventListener("change", function () {
-            if (!inputFoto.files.length) return;
+    if (!formFotoPerfil) return;
 
-            const dadosFormulario = new FormData(formFotoPerfil);
-            fetch(formFotoPerfil.action, {
-                method: "POST",
-                headers: { "X-Requested-With": "XMLHttpRequest" },
-                body: dadosFormulario
-            })
-                .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
-                .then(function (dados) {
-                    if (dados.foto) {
-                        let imagemAtual = document.getElementById("fotoPerfilAtual");
-                        if (!imagemAtual) {
-                            imagemAtual = document.createElement("img");
-                            imagemAtual.id = "fotoPerfilAtual";
-                            imagemAtual.className = "foto-perfil-leitor";
-                            imagemAtual.alt = "Sua foto de perfil";
-                            const avatarAntigo = document.querySelector(".cartaoLeitor .avatarPadrao");
-                            if (avatarAntigo) avatarAntigo.replaceWith(imagemAtual);
-                        }
-                        imagemAtual.src = dados.foto;
-                        atualizarMural(); // pra atualizar o avatar nos posts também
+    const inputFoto = document.getElementById("upload-foto-perfil");
+    inputFoto.addEventListener("change", function () {
+        if (!inputFoto.files.length) return;
+
+        const dadosFormulario = new FormData(formFotoPerfil);
+        fetch(formFotoPerfil.action, {
+            method: "POST",
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+            body: dadosFormulario
+        })
+            .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+            .then(function (dados) {
+                if (dados.foto) {
+                    let imagemAtual = document.getElementById("fotoPerfilAtual");
+                    if (!imagemAtual) {
+                        imagemAtual = document.createElement("img");
+                        imagemAtual.id = "fotoPerfilAtual";
+                        imagemAtual.className = "foto-perfil-leitor";
+                        imagemAtual.alt = "Sua foto de perfil";
+                        const avatarAntigo = document.querySelector(".cartaoLeitor .avatarPadrao");
+                        if (avatarAntigo) avatarAntigo.replaceWith(imagemAtual);
                     }
-                })
-                .catch(function () {
-                    alert("Não foi possível trocar a foto agora. Tente novamente.");
-                });
-        });
-    }
-});
+                    imagemAtual.src = dados.foto;
+                    if (document.getElementById("listaPublicacoes")) {
+                        atualizarMural();
+                    } else {
+                        location.reload();
+                    }
+                }
+            })
+            .catch(function () {
+                alert("Não foi possível trocar a foto agora. Tente novamente.");
+            });
+    });
+}
+
+function anexarEventoCurtirTeoria(form) {
+    form.addEventListener("submit", async function (evento) {
+        evento.preventDefault();
+        const botao = form.querySelector("button");
+        if (botao.disabled) return;
+        botao.disabled = true;
+        try {
+            const resposta = await fetch(form.action, {
+                method: "POST",
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            });
+            const dados = await resposta.json();
+            if (!resposta.ok || !dados.sucesso) {
+                throw new Error(dados.erro || "Não foi possível curtir.");
+            }
+            form.querySelector(".iconeCurtir").textContent = dados.curtiu ? "❤️" : "🤍";
+            form.querySelector(".contadorCurtidas").textContent = dados.total;
+        } catch (erro) {
+            alert("Não foi possível registrar a curtida. Tente novamente.");
+        } finally {
+            botao.disabled = false;
+        }
+    });
+}
+
+function anexarEventoExcluirComentarioTeoria(form) {
+    form.addEventListener("submit", async function (evento) {
+        evento.preventDefault();
+        const botao = form.querySelector("button");
+        if (botao.disabled) return;
+        botao.disabled = true;
+        try {
+            const resposta = await fetch(form.action, {
+                method: "POST",
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            });
+            const dados = await resposta.json();
+            if (!resposta.ok || !dados.sucesso) {
+                throw new Error(dados.erro || "Não foi possível excluir.");
+            }
+
+            const cartao = form.closest(".cartaoTeoria");
+            const item = form.closest(".itemComentario");
+            if (item) item.remove();
+
+            const contador = cartao ? cartao.querySelector(".contadorComentarios") : null;
+            if (contador) contador.textContent = dados.total;
+        } catch (erro) {
+            alert("Não foi possível excluir o comentário. Tente novamente.");
+            botao.disabled = false;
+        }
+    });
+}
+
+function anexarEventoComentarioTeoria(form) {
+    form.addEventListener("submit", async function (evento) {
+        evento.preventDefault();
+        const campo = form.querySelector('textarea[name="texto_comentario"]');
+        const botao = form.querySelector('button[type="submit"]');
+        const texto = campo.value.trim();
+        if (!texto || botao.disabled) return;
+        botao.disabled = true;
+        try {
+            const dadosFormulario = new URLSearchParams();
+            dadosFormulario.set("texto_comentario", texto);
+
+            const resposta = await fetch(form.action, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                body: dadosFormulario.toString()
+            });
+            const dados = await resposta.json();
+            if (!resposta.ok || !dados.idComentarios) {
+                throw new Error(dados.erro || "Não foi possível comentar.");
+            }
+
+            const cartao = form.closest(".cartaoTeoria");
+            const lista = cartao.querySelector(".listaComentarios");
+            const item = document.createElement("div");
+            item.className = "itemComentario";
+            item.id = "comentario-teoria-" + dados.idComentarios;
+
+            const paragrafo = document.createElement("p");
+            const nome = document.createElement("strong");
+            nome.textContent = dados.nomeCadastroUsuario + ": ";
+            paragrafo.appendChild(nome);
+            paragrafo.appendChild(document.createTextNode(dados.textComentarios));
+            item.appendChild(paragrafo);
+
+            const formExcluir = document.createElement("form");
+            formExcluir.action = "/excluir_comentario_teoria/" + dados.idComentarios;
+            formExcluir.method = "POST";
+            formExcluir.className = "formExcluirComentario";
+
+            const botaoExcluir = document.createElement("button");
+            botaoExcluir.type = "submit";
+            botaoExcluir.className = "botaoExcluirComentario";
+            botaoExcluir.textContent = "Excluir";
+            formExcluir.appendChild(botaoExcluir);
+
+            anexarEventoExcluirComentarioTeoria(formExcluir);
+            item.appendChild(formExcluir);
+            lista.appendChild(item);
+
+            const contador = cartao.querySelector(".contadorComentarios");
+            if (contador) contador.textContent = dados.total;
+            campo.value = "";
+        } catch (erro) {
+            alert("Não foi possível publicar o comentário. Tente novamente.");
+        } finally {
+            botao.disabled = false;
+        }
+    });
+}
+
+function inicializarTeorias() {
+    const listaTeorias = document.getElementById("listaTeorias");
+    if (!listaTeorias) return;
+    listaTeorias.querySelectorAll(".formCurtir").forEach(anexarEventoCurtirTeoria);
+    listaTeorias.querySelectorAll(".formComentario").forEach(anexarEventoComentarioTeoria);
+    listaTeorias.querySelectorAll(".formExcluirComentario").forEach(anexarEventoExcluirComentarioTeoria);
+}

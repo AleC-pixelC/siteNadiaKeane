@@ -1,7 +1,10 @@
 import sqlite3
 from werkzeug.security import generate_password_hash
 
-conexao = sqlite3.connect("bancoNK.db")
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+conexao = sqlite3.connect(os.path.join(BASE_DIR, "bancoNK.db"))
 cursor = conexao.cursor()
 
 cursor.execute("""CREATE TABLE IF NOT EXISTS usuarios (

@@ -225,14 +225,88 @@ def fas():
     )
 
 
-
-@app.route('/fasConcurso')
-def fasConcurso():
-    return render_template('fasConcurso.html')
-
 @app.route('/fasTeorias')
 def fasTeorias():
-    return render_template('fasTeorias.html')
+    conexao = conectar_bd()
+
+    teorias = conexao.execute('''
+        SELECT
+            teorias.idTeoria,
+            teorias.idUsuario,
+            teorias.textoTeoria AS conteudo,
+            teorias.imagemTeoria AS imagem,
+            teorias.dataTeoria,
+            usuarios.nomeCadastroUsuario,
+            usuarios.fotoPerfilUsuario,
+            (
+                SELECT COUNT(*)
+                FROM curtidas_teorias
+                WHERE curtidas_teorias.idTeoria = teorias.idTeoria
+            ) AS totalCurtidas,
+            (
+                SELECT COUNT(*)
+                FROM comentarios_teorias
+                WHERE comentarios_teorias.idTeoria = teorias.idTeoria
+            ) AS totalComentarios
+        FROM teorias
+        JOIN usuarios
+            ON teorias.idUsuario = usuarios.idUsuario
+        ORDER BY teorias.dataTeoria DESC
+    ''').fetchall()
+
+    curtidas_usuario = set()
+
+    if 'usuario_id' in session:
+        linhas = conexao.execute('''
+            SELECT idTeoria
+            FROM curtidas_teorias
+            WHERE idUsuario = ?
+        ''', (session['usuario_id'],)).fetchall()
+
+        curtidas_usuario = {
+            linha['idTeoria'] for linha in linhas
+        }
+
+    comentarios_por_teoria = {}
+
+    for teoria in teorias:
+        comentarios = conexao.execute('''
+            SELECT
+                comentarios_teorias.idComentarioTeoria AS idComentarios,
+                comentarios_teorias.idUsuario,
+                comentarios_teorias.textoComentario AS textComentarios,
+                comentarios_teorias.dataComentario AS dataComentarios,
+                usuarios.nomeCadastroUsuario
+            FROM comentarios_teorias
+            JOIN usuarios
+                ON comentarios_teorias.idUsuario = usuarios.idUsuario
+            WHERE comentarios_teorias.idTeoria = ?
+            ORDER BY comentarios_teorias.dataComentario ASC
+        ''', (teoria['idTeoria'],)).fetchall()
+
+        comentarios_por_teoria[teoria['idTeoria']] = comentarios
+
+    foto_usuario_logado = None
+
+    if 'usuario_id' in session:
+        linha_usuario = conexao.execute('''
+            SELECT fotoPerfilUsuario
+            FROM usuarios
+            WHERE idUsuario = ?
+        ''', (session['usuario_id'],)).fetchone()
+
+        if linha_usuario:
+            foto_usuario_logado = linha_usuario['fotoPerfilUsuario']
+
+    conexao.close()
+
+    return render_template(
+        'fasTeorias.html',
+        teorias=teorias,
+        curtidas_usuario=curtidas_usuario,
+        comentarios_por_teoria=comentarios_por_teoria,
+        foto_usuario_logado=foto_usuario_logado
+    )
 
 @app.route('/fasPodCast')
 def fasPodCast():
@@ -243,14 +317,8 @@ def fasPodCast():
 @login_necessario
 def cadastrar_post():
     conteudo = request.form.get('conteudo')
-    arquivo_imagem = request.files.get('imagem')
-    caminho_imagem = None
-
-    if arquivo_imagem and arquivo_imagem.filename != '':
-        nome_imagem = secure_filename(arquivo_imagem.filename)
-        caminho_completo = os.path.join(app.config['UPLOAD_FOLDER'], nome_imagem)
-        arquivo_imagem.save(caminho_completo)
-        caminho_imagem = f"uploads/{nome_imagem}"
+    # Agora usa nome único (UUID), igual às teorias e à foto de perfil
+    caminho_imagem = salvar_imagem_enviada(request.files.get('imagem'))
 
     conexao = conectar_bd()
     conexao.execute('''
@@ -356,6 +424,187 @@ def excluir_comentario(id_comentarios):
         return jsonify(sucesso=True)
     return redirect(url_for('fas'))
 
+@app.route('/cadastrar_teoria', methods=['POST'])
+@login_necessario
+def cadastrar_teoria():
+    conteudo = request.form.get('conteudo', '').strip()
+    arquivo_imagem = request.files.get('imagem')
+    caminho_imagem = salvar_imagem_enviada(arquivo_imagem)
+    if not conteudo and not caminho_imagem:
+        flash('Escreva uma teoria ou escolha uma imagem.')
+        return redirect(url_for('fasTeorias'))
+    conexao = conectar_bd()
+    conexao.execute('''
+        INSERT INTO teorias (idUsuario, textoTeoria, imagemTeoria)
+        VALUES (?, ?, ?)
+    ''', (session['usuario_id'], conteudo, caminho_imagem))
+    conexao.commit()
+    conexao.close()
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify(sucesso=True)
+    return redirect(url_for('fasTeorias'))
+
+@app.route('/curtir_teoria/<int:id_teoria>', methods=['POST'])
+@login_necessario
+def curtir_teoria(id_teoria):
+    usuario_id = session['usuario_id']
+    conexao = conectar_bd()
+    teoria = conexao.execute(
+        'SELECT idTeoria FROM teorias WHERE idTeoria = ?',
+        (id_teoria,)
+    ).fetchone()
+    if not teoria:
+        conexao.close()
+        return jsonify(sucesso=False, erro='Teoria não encontrada.'), 404
+    ja_curtiu = conexao.execute('''
+        SELECT 1
+        FROM curtidas_teorias
+        WHERE idTeoria = ? AND idUsuario = ?
+    ''', (id_teoria, usuario_id)).fetchone()
+    if ja_curtiu:
+        conexao.execute('''
+            DELETE FROM curtidas_teorias
+            WHERE idTeoria = ? AND idUsuario = ?
+        ''', (id_teoria, usuario_id))
+        curtiu = False
+    else:
+        conexao.execute('''
+            INSERT INTO curtidas_teorias (idTeoria, idUsuario)
+            VALUES (?, ?)
+        ''', (id_teoria, usuario_id))
+        curtiu = True
+    total = conexao.execute('''
+        SELECT COUNT(*) AS total
+        FROM curtidas_teorias
+        WHERE idTeoria = ?
+    ''', (id_teoria,)).fetchone()['total']
+    conexao.commit()
+    conexao.close()
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify(sucesso=True, curtiu=curtiu, total=total)
+    return redirect(url_for('fasTeorias'))
+
+@app.route('/comentar_teoria/<int:id_teoria>', methods=['POST'])
+@login_necessario
+def comentar_teoria(id_teoria):
+    texto = request.form.get('texto_comentario', '').strip()
+    if not texto:
+        return redirect(url_for('fasTeorias'))
+    conexao = conectar_bd()
+    teoria = conexao.execute(
+        'SELECT idTeoria FROM teorias WHERE idTeoria = ?',
+        (id_teoria,)
+    ).fetchone()
+    if not teoria:
+        conexao.close()
+        return jsonify(sucesso=False, erro='Teoria não encontrada.'), 404
+    cursor = conexao.execute('''
+        INSERT INTO comentarios_teorias (idTeoria, idUsuario, textoComentario)
+        VALUES (?, ?, ?)
+    ''', (id_teoria, session['usuario_id'], texto))
+    novo_id = cursor.lastrowid
+    total = conexao.execute('''
+        SELECT COUNT(*) AS total
+        FROM comentarios_teorias
+        WHERE idTeoria = ?
+    ''', (id_teoria,)).fetchone()['total']
+    conexao.commit()
+    conexao.close()
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify(
+            idComentarios=novo_id,
+            nomeCadastroUsuario=session.get('usuario_nome'),
+            textComentarios=texto,
+            total=total
+        )
+
+    return redirect(url_for('fasTeorias'))
+
+@app.route('/excluir_teoria/<int:id_teoria>', methods=['POST'])
+@login_necessario
+def excluir_teoria(id_teoria):
+    conexao = conectar_bd()
+    teoria = conexao.execute('''
+        SELECT idUsuario, imagemTeoria
+        FROM teorias
+        WHERE idTeoria = ?
+    ''', (id_teoria,)).fetchone()
+    if teoria and teoria['idUsuario'] == session['usuario_id']:
+        conexao.execute(
+            'DELETE FROM curtidas_teorias WHERE idTeoria = ?',
+            (id_teoria,)
+        )
+        conexao.execute(
+            'DELETE FROM comentarios_teorias WHERE idTeoria = ?',
+            (id_teoria,)
+        )
+        conexao.execute(
+            'DELETE FROM teorias WHERE idTeoria = ?',
+            (id_teoria,)
+        )
+        conexao.commit()
+        if teoria['imagemTeoria']:
+            caminho = os.path.join(
+                BASE_DIR, 'static', teoria['imagemTeoria']
+            )
+            if os.path.exists(caminho):
+                try:
+                    os.remove(caminho)
+                except OSError:
+                    pass
+    conexao.close()
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify(sucesso=True)
+    return redirect(url_for('fasTeorias'))
+
+
+@app.route('/excluir_comentario_teoria/<int:id_comentarios>', methods=['POST'])
+@login_necessario
+def excluir_comentario_teoria(id_comentarios):
+    conexao = conectar_bd()
+    try:
+        comentario = conexao.execute('''
+            SELECT idUsuario, idTeoria
+            FROM comentarios_teorias
+            WHERE idComentarioTeoria = ?
+        ''', (id_comentarios,)).fetchone()
+        if not comentario:
+            return jsonify(
+                sucesso=False,
+                erro='Comentário não encontrado.'
+            ), 404
+        if comentario['idUsuario'] != session['usuario_id']:
+            return jsonify(
+                sucesso=False,
+                erro='Você não pode excluir esse comentário.'
+            ), 403
+        id_teoria = comentario['idTeoria']
+        conexao.execute('''
+            DELETE FROM comentarios_teorias
+            WHERE idComentarioTeoria = ?
+        ''', (id_comentarios,))
+        conexao.commit()
+        total = conexao.execute('''
+            SELECT COUNT(*) AS total
+            FROM comentarios_teorias
+            WHERE idTeoria = ?
+        ''', (id_teoria,)).fetchone()['total']
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify(
+                sucesso=True,
+                idComentarios=id_comentarios,
+                total=total
+            )
+        return redirect(url_for('fasTeorias'))
+    except sqlite3.Error:
+        conexao.rollback()
+        app.logger.exception('Erro ao excluir comentário da teoria.')
+        return jsonify(
+            sucesso=False,
+            erro='Erro ao excluir comentário.'
+        ), 500
+    finally:
+        conexao.close()
 
 if __name__ == '__main__':
     app.run(debug=True)
